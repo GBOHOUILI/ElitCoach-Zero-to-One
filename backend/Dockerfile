@@ -9,6 +9,7 @@ COPY . .
 RUN pnpm install
 
 WORKDIR /app/backend
+
 RUN pnpm exec prisma generate
 RUN pnpm run build
 
@@ -20,14 +21,22 @@ WORKDIR /app
 
 RUN npm install -g pnpm
 
-COPY --from=builder /app/backend/dist ./backend/dist
-COPY --from=builder /app/backend/prisma ./backend/prisma
-COPY --from=builder /app/shared ./shared
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+COPY backend/package.json ./backend/package.json
+COPY backend/prisma ./backend/prisma
+COPY shared ./shared
 
 RUN pnpm install --prod
 
+# IMPORTANT: copy build output FROM builder
+COPY --from=builder /app/backend/dist ./backend/dist
+
 WORKDIR /app/backend
+
+ENV NODE_ENV=production
+ENV PORT=3001
+
+EXPOSE 3001
 
 CMD ["node", "dist/main.js"]
