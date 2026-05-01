@@ -1,45 +1,44 @@
+# -------------------------
+# BUILD
+# -------------------------
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 RUN npm install -g pnpm
-RUN apk add --no-cache openssl libc6-compat
 
 COPY . .
 
-# FULL install (prisma CLI présent ici)
 RUN pnpm install
 
-WORKDIR /app/backend
-
-# Prisma OK ici
+# IMPORTANT : Prisma généré depuis ROOT workspace
 RUN pnpm exec prisma generate
 
-# Build Nest
-RUN pnpm run build
+# build backend
+RUN pnpm --filter backend run build
 
 
+# -------------------------
+# RUNTIME
+# -------------------------
 FROM node:20-alpine AS runner
 
 WORKDIR /app
 
-RUN apk add --no-cache openssl libc6-compat
 RUN npm install -g pnpm
 
-COPY . .
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# prod install ONLY (pas de prisma CLI ici, normal)
+# install prod deps only
 RUN pnpm install --prod
 
+# backend build
+COPY --from=builder /app/backend/dist /app/backend/dist
+
+# Prisma runtime (IMPORTANT: depuis root)
+COPY --from=builder /app/node_modules/.prisma /app/node_modules/.prisma
+
 WORKDIR /app/backend
-
-# ❌ IMPORTANT: NO prisma generate ici
-
-# copy build
-COPY --from=builder /app/backend/dist ./dist
-
-# Prisma client déjà généré dans builder → OK
-COPY --from=builder /app/backend/node_modules/.prisma ./node_modules/.prisma
 
 ENV NODE_ENV=production
 ENV PORT=3001
