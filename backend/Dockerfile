@@ -9,12 +9,12 @@ RUN npm install -g pnpm
 
 COPY . .
 
-# install ALL deps (dev + prod)
+# install ALL deps (important pour prisma generate)
 RUN pnpm install
 
 WORKDIR /app/backend
 
-# generate prisma client (OK car dev deps présentes)
+# generate prisma client
 RUN pnpm exec prisma generate
 
 # build nest
@@ -32,15 +32,11 @@ RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# install ONLY prod deps
+# install prod deps only
 RUN pnpm install --prod
 
-# copy build output
+# copy backend build
 COPY --from=builder /app/backend/dist ./backend/dist
-
-# ⚠️ IMPORTANT: prisma client doit aussi exister dans runtime
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 WORKDIR /app/backend
 
