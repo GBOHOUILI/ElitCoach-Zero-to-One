@@ -29,7 +29,9 @@ COPY shared ./shared
 
 RUN pnpm install --prod
 
-# IMPORTANT: copy build output FROM builder
+# 🔥 IMPORTANT FIX
+RUN pnpm exec prisma generate
+
 COPY --from=builder /app/backend/dist ./backend/dist
 
 WORKDIR /app/backend
