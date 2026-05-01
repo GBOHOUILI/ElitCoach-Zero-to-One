@@ -7,15 +7,13 @@ RUN apk add --no-cache openssl libc6-compat
 
 COPY . .
 
-# INSTALL FULL (IMPORTANT: Prisma CLI doit exister)
 RUN pnpm install
 
 WORKDIR /app/backend
 
-# Prisma generate ICI uniquement
+# Prisma generate dans backend ONLY
 RUN pnpm exec prisma generate
 
-# build backend
 RUN pnpm run build
 
 
@@ -28,17 +26,18 @@ RUN npm install -g pnpm
 
 COPY . .
 
-# install prod deps uniquement
 RUN pnpm install --prod
 
 WORKDIR /app/backend
 
-# ❌ IMPORTANT: NO prisma generate ici
-# (sinon casse car CLI absent)
+# ❌ NO copy of root prisma
+# ❌ NO node_modules/.prisma copy
 
-# copy build
+# ✔ rebuild Prisma runtime-safe (simple & stable)
+RUN pnpm exec prisma generate
+
+# ✔ correct build copy
 COPY --from=builder /app/backend/dist ./dist
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 ENV NODE_ENV=production
 ENV PORT=3001
