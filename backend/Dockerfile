@@ -1,6 +1,3 @@
-# -------------------------
-# BUILD
-# -------------------------
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -11,16 +8,13 @@ COPY . .
 
 RUN pnpm install
 
-# IMPORTANT : Prisma généré depuis ROOT workspace
-RUN pnpm exec prisma generate
+# Prisma ONLY ici
+RUN pnpm --filter backend exec prisma generate
 
-# build backend
+# build backend ONLY
 RUN pnpm --filter backend run build
 
 
-# -------------------------
-# RUNTIME
-# -------------------------
 FROM node:20-alpine AS runner
 
 WORKDIR /app
@@ -29,20 +23,17 @@ RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# install prod deps only
 RUN pnpm install --prod
 
-# backend build
-COPY --from=builder /app/backend/dist /app/backend/dist
+# backend build output
+COPY --from=builder /app/backend/dist ./backend/dist
 
-# Prisma runtime (IMPORTANT: depuis root)
-COPY --from=builder /app/node_modules/.prisma /app/node_modules/.prisma
+# Prisma runtime (OK)
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 WORKDIR /app/backend
 
 ENV NODE_ENV=production
 ENV PORT=3001
-
-EXPOSE 3001
 
 CMD ["node", "dist/main.js"]
