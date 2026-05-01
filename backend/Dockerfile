@@ -7,12 +7,14 @@ RUN apk add --no-cache openssl libc6-compat
 
 COPY . .
 
-RUN pnpm install
+# IMPORTANT: installer workspace correctement
+RUN pnpm install --frozen-lockfile
 
-WORKDIR /app/backend
+# build backend explicitement dans workspace
+RUN pnpm --filter backend run build
 
-RUN pnpm exec prisma generate
-RUN pnpm run build
+# Prisma generate dans backend workspace
+RUN pnpm --filter backend exec prisma generate
 
 
 FROM node:20-alpine AS runner
@@ -24,19 +26,18 @@ RUN npm install -g pnpm
 
 COPY . .
 
-RUN pnpm install
+# install production deps proprement
+RUN pnpm install --prod --frozen-lockfile
 
-WORKDIR /app/backend
+# Prisma runtime safety
+RUN pnpm --filter backend exec prisma generate
 
-RUN pnpm exec prisma generate
-
-# ✅ IMPORTANT: bon chemin (PAS de backend/ en trop)
-COPY --from=builder /app/backend/dist ./dist
+# copie du build backend (IMPORTANT: workspace path correct)
+COPY --from=builder /app/backend/dist ./backend/dist
 
 ENV NODE_ENV=production
 ENV PORT=3001
 
 EXPOSE 3001
 
-# ✅ match exact avec structure réelle
-CMD ["node", "dist/main.js"]
+CMD ["node", "backend/dist/main.js"]
