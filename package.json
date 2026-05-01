@@ -1,0 +1,20 @@
+{
+  "name": "elitcoach-monorepo",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"pnpm run dev:backend\" \"pnpm run dev:frontend\"",
+    "dev:backend": "pnpm --filter backend run start:dev",
+    "dev:frontend": "pnpm --filter frontend run dev",
+    "build": "pnpm --filter backend run build && pnpm --filter frontend run build",
+    "prisma:generate": "pnpm --filter backend exec prisma generate --schema=../prisma/schema.prisma",
+    "prisma:migrate": "pnpm --filter backend exec prisma migrate dev --schema=../prisma/schema.prisma"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

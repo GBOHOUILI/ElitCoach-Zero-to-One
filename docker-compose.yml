@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: elitcoach_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: elitcoach
+      POSTGRES_PASSWORD: elitcoach
+      POSTGRES_DB: elitcoach_dev
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - elitcoach_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U elitcoach -d elitcoach_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7
+    container_name: elitcoach_redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    networks:
+      - elitcoach_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  elitcoach_net:
+    driver: bridge

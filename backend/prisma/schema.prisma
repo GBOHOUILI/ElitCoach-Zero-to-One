@@ -1,0 +1,254 @@
+// ElitCoach — Prisma Schema V1.0
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ENUMS ───────────────────────────────────────────────
+
+enum Role {
+  COACH
+  CLIENT
+  ADMIN
+}
+
+enum CoachStatus {
+  PENDING
+  SCREENING
+  INTERVIEW
+  TEST
+  APPROVED
+  REJECTED
+}
+
+enum ClientStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum SessionStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum GoalStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
+}
+
+// ─── MODELS ──────────────────────────────────────────────
+
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  passwordHash    String
+  role            Role      @default(CLIENT)
+  emailVerified   Boolean   @default(false)
+  suspended       Boolean   @default(false)
+  suspendedUntil  DateTime?
+  status          String    @default("ACTIVE")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  coachProfile        CoachProfile?
+  clientProfile       ClientProfile?
+  emailVerifications  EmailVerification[]
+  refreshTokens       RefreshToken[]
+}
+
+model CoachProfile {
+  id              String      @id @default(uuid())
+  userId          String      @unique
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName       String
+  lastName        String
+  bio             String?
+  specialties     String[]
+  certifications  String[]
+  yearsExperience Int?
+  hourlyRate      Int?
+  videoUrl        String?
+  slug            String?     @unique
+  photoUrl        String?
+  status          CoachStatus @default(PENDING)
+  score           Int         @default(0)
+  isVerified      Boolean     @default(false)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  availability    Availability[]
+  sessionsAsCoach Session[]      @relation("CoachSessions")
+  goals           Goal[]
+  conversations   Conversation[]
+}
+
+model ClientProfile {
+  id                  String        @id @default(uuid())
+  userId              String        @unique
+  user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName           String
+  lastName            String
+    photoUrl        String?
+  objective           String?
+  budget              Int?
+  qualifyScore        Int?
+  hoursPerWeek        Int?
+  hadCoachBefore      Boolean?
+  previousCoachResult String?
+  whyNow              String?
+  status              ClientStatus  @default(PENDING)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  sessionsAsClient    Session[]      @relation("ClientSessions")
+  goals               Goal[]
+  conversations       Conversation[]
+}
+
+model EmailVerification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Availability {
+  id          String      @id @default(uuid())
+  coachId     String
+  coach       CoachProfile @relation(fields: [coachId], references: [id], onDelete: Cascade)
+  dayOfWeek   Int
+  startTime   String
+  endTime     String
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+}
+
+model Session {
+  id                    String        @id @default(uuid())
+  coachId               String
+  coach                 CoachProfile  @relation("CoachSessions", fields: [coachId], references: [id])
+  clientId              String
+  client                ClientProfile @relation("ClientSessions", fields: [clientId], references: [id])
+  scheduledAt           DateTime
+  durationMins          Int           @default(60)
+  status                SessionStatus @default(PENDING)
+  price                 Int
+  stripePaymentIntentId String?
+  zoomLink              String?
+  coachNotes            String?
+  cancelReason          String?
+  cancelledBy           String?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  review    Review?
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  sessionId   String   @unique
+  session     Session  @relation(fields: [sessionId], references: [id])
+  coachId     String
+  clientId    String
+  rating      Int
+  comment     String?
+  listening   Int?
+  methodology Int?
+  results     Int?
+  punctuality Int?
+  createdAt   DateTime @default(now())
+}
+
+model Conversation {
+  id        String         @id @default(uuid())
+  coachId   String
+  coach     CoachProfile   @relation(fields: [coachId], references: [id])
+  clientId  String
+  client    ClientProfile  @relation(fields: [clientId], references: [id])
+  messages  Message[]
+  createdAt DateTime       @default(now())
+
+  @@unique([coachId, clientId])
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  content        String
+  fileUrl        String?
+  fileType       String?
+  isRead         Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+}
+
+model Alert {
+  id               String   @id @default(uuid())
+  type             String
+  userId           String
+  conversationId   String?
+  blockedContent   String?
+  detectedPattern  String?
+  isResolved       Boolean  @default(false)
+  createdAt        DateTime @default(now())
+}
+
+model Goal {
+  id          String     @id @default(uuid())
+  coachId     String
+  coach       CoachProfile @relation(fields: [coachId], references: [id])
+  clientId    String
+  client      ClientProfile @relation(fields: [clientId], references: [id])
+  title       String
+  description String?
+  targetDate  DateTime
+  progress    Int        @default(0)
+  status      GoalStatus @default(ACTIVE)
+  steps       GoalStep[]
+  checkIns    CheckIn[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model GoalStep {
+  id          String    @id @default(uuid())
+  goalId      String
+  goal        Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  title       String
+  dueDate     DateTime?
+  isCompleted Boolean   @default(false)
+  completedAt DateTime?
+  order       Int
+}
+
+model CheckIn {
+  id        String   @id @default(uuid())
+  goalId    String
+  goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  clientId  String
+  answers   Json
+  coachNote String?
+  createdAt DateTime @default(now())
+}

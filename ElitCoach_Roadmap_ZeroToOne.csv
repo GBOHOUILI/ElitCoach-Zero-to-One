@@ -1,0 +1,555 @@
+Phase,Version,Domaine,ID_Tache,Titre,Description,Prompt_IA,Dependances,Statut,Priorite,Post_Marketing,LinkedIn,Twitter_X,Facebook
+PHASE 0 — SETUP,SETUP,INFRA,S-001,Créer le dépôt GitHub monorepo,"Créer un repo GitHub avec structure monorepo : /frontend (Next.js), /backend (NestJS), /shared (types communs). Initialiser avec README et .gitignore.","Prompt IA : 'Génère la structure de dossiers pour un monorepo Next.js + NestJS avec un dossier /shared pour les types TypeScript partagés. Inclus le .gitignore, le README.md et un package.json root avec workspaces npm.'",,Terminé,CRITIQUE,,,,
+PHASE 0 — SETUP,SETUP,INFRA,S-002,Configurer Docker Compose (Linux/VPS),Créer docker-compose.yml pour lancer PostgreSQL 15 + Redis 7 en local sur Linux. Volumes persistants + healthchecks.,"Prompt IA : 'Crée un fichier docker-compose.yml pour Linux/VPS avec : PostgreSQL 15 (port 5432, user: elitcoach, password: elitcoach, db: elitcoach_dev), Redis 7 (port 6379). Volume persistant postgres_data. Healthcheck sur les deux. Réseau bridge dédié elitcoach_net.'",S-001,Terminé,CRITIQUE,,,,
+PHASE 0 — SETUP,SETUP,INFRA,S-003,Lancer le container Docker (Linux),Installer Docker + Docker Compose sur le VPS Linux si pas encore fait. Lancer les services et vérifier la connexion Postgres.,Commandes Linux : sudo apt update && sudo apt install -y docker.io docker-compose | sudo systemctl enable docker | sudo usermod -aG docker $USER | docker compose up -d | docker compose ps | docker exec -it elitcoach_postgres psql -U elitcoach -d elitcoach_dev -c '\l',S-002,Terminé,CRITIQUE,,,,
+PHASE 0 — SETUP,SETUP,BACKEND,S-004,Initialiser le projet NestJS (backend),"Créer le projet NestJS dans /backend. Installer : @nestjs/config, prisma, @prisma/client, bcrypt, @nestjs/jwt, @nestjs/passport, class-validator, bull, @nestjs/bull, socket.io.","Commandes Linux : cd /backend && npm i -g @nestjs/cli && nest new . --strict --package-manager npm | npm install @nestjs/config @prisma/client prisma bcrypt @nestjs/jwt @nestjs/passport passport passport-jwt class-validator class-transformer bull @nestjs/bull ioredis @nestjs/websockets socket.io | Prompt IA : 'Crée la structure de modules NestJS : /src/modules/auth, /src/modules/coaches, /src/modules/clients, /src/modules/sessions, /src/modules/messages, /src/modules/goals, /src/modules/admin, /src/common/guards, /src/common/decorators, /src/common/prisma.'",S-001,Terminé,CRITIQUE,,,,
+PHASE 0 — SETUP,SETUP,BACKEND,S-005,Configurer Prisma + connexion BDD,Créer prisma/schema.prisma avec datasource PostgreSQL. Créer PrismaService injectable dans NestJS. Tester la connexion.,Prompt IA : 'Configure Prisma dans NestJS sur Linux. Crée prisma/schema.prisma avec datasource postgresql et generator client. Crée un PrismaModule avec PrismaService (extends PrismaClient) injectable globalement. Fichier .env avec DATABASE_URL=postgresql://elitcoach:elitcoach@localhost:5432/elitcoach_dev. Commande test : npx prisma db push',"S-003, S-004",Terminé,CRITIQUE,,,,
+PHASE 0 — SETUP,SETUP,FRONTEND,S-006,Initialiser le projet Next.js (frontend),"Créer le projet Next.js 14 dans /frontend avec App Router, TypeScript strict, Tailwind CSS. Configurer la couleur dorée custom.","Commandes Linux : cd /frontend && npx create-next-app@latest . --typescript --tailwind --app --eslint | Prompt IA : 'Configure tailwind.config.ts avec couleur custom : gold: { DEFAULT: ""#C9A84C"", light: ""#E8C97A"", dark: ""#A07830"" }. Crée le fichier .env.local avec NEXT_PUBLIC_API_URL=http://localhost:3001. Installe : react-hook-form zod @hookform/resolvers axios stripe @stripe/react-stripe-js @stripe/stripe-js socket.io-client recharts'",S-001,Terminé,CRITIQUE,,,,
+PHASE 0 — SETUP,SETUP,SERVICES,S-007,Créer les comptes services gratuits (0€),"Créer les comptes gratuits : Supabase (BDD prod + storage), Brevo (emails transac), Stripe (mode test), Cloudinary (vidéos), Upstash (Redis cloud). Tous ont un free tier suffisant pour le lancement.",Ordre de création : 1. supabase.com → new project → copier DATABASE_URL de Settings/Database. 2. brevo.com → copier BREVO_API_KEY de Settings/API. 3. stripe.com → activer mode test → copier STRIPE_SECRET_KEY + STRIPE_PUBLISHABLE_KEY. 4. cloudinary.com → copier CLOUDINARY_URL. 5. upstash.com → Redis → copier REDIS_URL. Tout noter dans un fichier .env.example (sans les vraies clés).,S-001,À faire (toi),CRITIQUE,,,,
+PHASE 0 — SETUP,SETUP,SERVICES,S-008,Configurer les variables d'environnement,Créer /backend/.env avec toutes les clés. Vérifier que .env est dans .gitignore. Créer .env.example avec les clés vides pour la documentation.,Variables backend/.env : DATABASE_URL=postgresql://elitcoach:elitcoach@localhost:5432/elitcoach_dev | JWT_SECRET=dev_secret_change_in_prod | JWT_REFRESH_SECRET=dev_refresh_secret | JWT_ACCESS_EXPIRY=15m | JWT_REFRESH_EXPIRY=7d | STRIPE_SECRET_KEY=sk_test_... | STRIPE_WEBHOOK_SECRET=whsec_test_... | BREVO_API_KEY=xkeysib-... | EMAIL_FROM=hello@elitcoach.co | CLOUDINARY_URL=cloudinary://... | SUPABASE_URL=https://xxx.supabase.co | SUPABASE_SERVICE_KEY=eyJ... | REDIS_URL=redis://localhost:6379 | FRONTEND_URL=http://localhost:3000 | PORT=3001 | NODE_ENV=development,S-007,Terminé,CRITIQUE,,,,
+PHASE 0 — SETUP,SETUP,MARKETING,S-009,Créer la page LinkedIn Zero to One,"Créer la page LinkedIn dédiée 'Zero to One' (pas le compte perso). Branding sobre luxe : fond noir, logo minimal, bio axée SaaS. Publier le premier post de lancement.","Étapes : 1. Sur LinkedIn → Créer une page → Entreprise → Nom : Zero to One. 2. Description : 'On construit des SaaS de zéro aux premiers revenus. En public. Sans capital. Chaque décision, chaque bug, chaque euro.' 3. Logo : typographie sobre blanc sur noir (Canva gratuit). 4. Photo de couverture : fond #0D0D0D avec texte '#buildinpublic' en blanc discret. 5. Publier le post ci-dessous.",,Terminé,CRITIQUE,POST LANCEMENT DE LA PAGE — Publier dès la page créée,"Zero to One — on construit en public.
+
+J'ai décidé de documenter chaque étape de la construction d'un SaaS : de zéro aux premiers revenus.
+
+Pas de teasing. Pas de résultats retouchés.
+Les vraies tâches, les vrais blocages, les vraies décisions.
+
+Premier projet : ElitCoach.
+Une plateforme de coaching premium avec une différence fondamentale : on filtre les coachs ET les clients.
+
+Jour 1 démarre aujourd'hui.
+
+Si tu veux suivre cette aventure → abonne-toi à cette page.
+
+#buildinpublic #saas #zerotoone #indiehacker","Construire un SaaS de zéro en public.
+
+Sans investisseur. Sans équipe. En documentant tout.
+
+Projet 1 : ElitCoach — coaching premium avec double sélection.
+
+Day 1. 🧵
+
+#buildinpublic #saas","On démarre Zero to One — construire des SaaS en public, de l'idée aux premiers revenus.
+
+Projet 1 : ElitCoach — la plateforme de coaching qui filtre les coachs ET les clients.
+
+On documente tout : les victoires, les bugs, les vraies chiffres.
+
+Si ça t'intéresse de suivre l'aventure → abonne-toi 👇
+
+#buildinpublic #saas #entrepreneuriat"
+PHASE 0 — SETUP,SETUP,MARKETING,S-010,Réserver le domaine elitcoach.co,Vérifier disponibilité et acheter elitcoach.co sur Cloudflare Registrar (~10$/an). DNS à configurer plus tard.,Sur Cloudflare Registrar : rechercher elitcoach.co → acheter. DNS initiaux : pointer vers une page 'coming soon' (Vercel par défaut). Aucun coût supplémentaire si déjà abonné Cloudflare free.,,À faire (toi),HAUTE,,,,
+V0.1 — AUTH & PROFILS,0.1,BACKEND,B-001,Modèle de données User (Prisma schema complet),"Créer dans prisma/schema.prisma : model User, CoachProfile, ClientProfile avec tous leurs champs, relations et enums.","Prompt IA : 'Dans prisma/schema.prisma, crée les modèles complets : model User (id String @id @default(uuid()), email String @unique, passwordHash String, role Role @default(CLIENT), emailVerified Boolean @default(false), suspended Boolean @default(false), suspendedUntil DateTime?, status String @default(""ACTIVE""), createdAt DateTime @default(now()), updatedAt DateTime @updatedAt, coachProfile CoachProfile?, clientProfile ClientProfile?) | enum Role { COACH CLIENT ADMIN } | model CoachProfile (id, userId @unique FK→User, firstName, lastName, bio String?, specialties String[], certifications String[], yearsExperience Int?, hourlyRate Int?, videoUrl String?, slug String? @unique, photoUrl String?, status CoachStatus @default(PENDING), score Int @default(0), isVerified Boolean @default(false), createdAt) | enum CoachStatus { PENDING SCREENING INTERVIEW TEST APPROVED REJECTED } | model ClientProfile (id, userId @unique FK→User, firstName, lastName, objective String?, budget Int?, qualifyScore Int?, hoursPerWeek Int?, hadCoachBefore Boolean?, previousCoachResult String?, whyNow String?, status ClientStatus @default(PENDING), createdAt) | enum ClientStatus { PENDING APPROVED REJECTED } | model EmailVerification (id UUID, userId String, token String @unique, expiresAt DateTime, createdAt) | model RefreshToken (id UUID, userId String, token String @unique, expiresAt DateTime, createdAt). Commande : npx prisma migrate dev --name init_users'",S-005,Terminé,CRITIQUE,,,,
+V0.1 — AUTH & PROFILS,0.1,BACKEND,B-002,Endpoint : Inscription Coach,"POST /api/auth/register/coach — Hash bcrypt (saltRounds:12), créer User(role=COACH)+CoachProfile(status=PENDING), token vérif email 48h, envoi Brevo.","Prompt IA : 'Dans NestJS, crée le endpoint POST /api/auth/register/coach dans AuthModule. DTO avec class-validator : email (IsEmail), password (min 8, 1 majuscule, 1 chiffre), firstName, lastName, specialties (IsArray), certifications (IsArray), yearsExperience (IsInt min 1), hourlyRate (IsInt min 50), bio (MinLength 200), videoUrl (IsUrl optionnel). Actions : 1) Vérifier unicité email (400 si existe). 2) bcrypt.hash(password, 12). 3) Prisma : créer User(role=COACH) + CoachProfile(status=PENDING). 4) crypto.randomBytes(32).toString(""hex"") → stocker dans EmailVerification avec expiresAt=now+48h. 5) Appel API Brevo : POST https://api.brevo.com/v3/smtp/email avec template email vérification et lien /verify-email?token=xxx. 6) Retourner 201 { message: ""Candidature soumise. Vérifiez votre email."", userId }.'","B-001, S-008",Terminé,CRITIQUE,,,,
+V0.1 — AUTH & PROFILS,0.1,BACKEND,B-003,Endpoint : Inscription Client avec scoring auto,POST /api/auth/register/client — Calcul score 4 critères (25pts chacun). Score < 60 → REJECTED + email. Score >= 60 → PENDING.,"Prompt IA : 'Crée POST /api/auth/register/client dans NestJS. DTO : email, password, firstName, lastName, objective (MinLength 50), budget (IsInt), hoursPerWeek (IsInt min 0), hadCoachBefore (IsBoolean), previousCoachResult (optionnel), whyNow (MinLength 50). Scoring automatique : objective.length > 50 → +25 | hoursPerWeek >= 2 → +25 | budget >= 200 → +25 | hadCoachBefore === true && previousCoachResult && previousCoachResult.length > 10 → +25. Si score < 60 → ClientProfile.status=REJECTED + email Brevo refus poli. Si score >= 60 → status=PENDING + email ""candidature en cours d\'analyse"". Créer User(role=CLIENT) + ClientProfile. Retourner 201 { message, score, status }.'","B-001, S-008",Terminé,CRITIQUE,,,,
+V0.1 — AUTH & PROFILS,0.1,BACKEND,B-004,Endpoint : Vérification Email,"GET /api/auth/verify-email?token=xxx — Chercher token, vérifier expiry 48h, emailVerified=true, supprimer token.","Prompt IA : 'Crée GET /api/auth/verify-email?token= dans NestJS. 1) Trouver le token dans EmailVerification. 2) Si introuvable → 400 { error: ""Token invalide"" }. 3) Si expiresAt < now → 400 { error: ""Token expiré"" }. 4) Mettre User.emailVerified=true. 5) Supprimer l\'enregistrement EmailVerification. 6) Retourner 200 { message: ""Email vérifié"" } (le frontend redirige vers /login?verified=true).'",B-002,Terminé,CRITIQUE,,,,
+V0.1 — AUTH & PROFILS,0.1,BACKEND,B-005,Endpoint : Login JWT (access 15min + refresh 7j),"POST /api/auth/login — Vérif bcrypt + emailVerified, générer accessToken JWT 15min + refreshToken 7j, stocker refresh en BDD.","Prompt IA : 'Crée POST /api/auth/login dans NestJS. 1) Trouver User par email. Si absent → 401. 2) await bcrypt.compare(password, user.passwordHash). Si faux → 401. 3) Si !user.emailVerified → 403 { error: ""Email non vérifié"" }. 4) Générer accessToken = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: ""15m"" }). 5) Générer refreshToken similaire avec JWT_REFRESH_SECRET, expiresIn: ""7d"". 6) Stocker refreshToken dans table RefreshToken (userId, token, expiresAt=now+7j). 7) Retourner { accessToken, refreshToken, user: { id, email, role, firstName, status } }.'","B-002, B-003",Terminé,CRITIQUE,,,,
+V0.1 — AUTH & PROFILS,0.1,BACKEND,B-006,Endpoint : Refresh Token,"POST /api/auth/refresh — Valider refreshToken, générer nouveau accessToken.","Prompt IA : 'Crée POST /api/auth/refresh dans NestJS. Body : { refreshToken }. 1) jwt.verify(refreshToken, JWT_REFRESH_SECRET). Si erreur → 401. 2) Chercher le token dans la table RefreshToken. Si absent → 401. 3) Retourner { accessToken: nouveau JWT 15min }.'",B-005,Terminé,HAUTE,,,,
+V0.1 — AUTH & PROFILS,0.1,BACKEND,B-007,Guards JWT + RolesGuard + Endpoints Profil,Créer JwtAuthGuard + RolesGuard réutilisables. GET /api/coaches/me + PATCH /api/coaches/me + GET /api/clients/me.,"Prompt IA : 'Dans NestJS crée : 1) JwtAuthGuard (extends AuthGuard(""jwt"")) avec stratégie JwtStrategy qui valide le Bearer token et injecte userId+role dans req.user. 2) RolesGuard qui vérifie le role via @Roles() decorator custom. 3) GET /api/coaches/me (auth COACH) → retourner CoachProfile complet de l\'user connecté. 4) PATCH /api/coaches/me (auth COACH) → body partiel (bio, hourlyRate, specialties...) → mettre à jour CoachProfile → retourner profil mis à jour. 5) GET /api/clients/me (auth CLIENT) → retourner ClientProfile complet.'",B-005,Terminé,HAUTE,,,,
+V0.1 — AUTH & PROFILS,0.1,BACKEND,B-008,Endpoint : Upload Vidéo Coach (Cloudinary),"POST /api/coaches/me/video — Multipart/form-data, validation format mp4/mov max 100MB, upload Cloudinary, MAJ videoUrl.","Prompt IA : 'Crée POST /api/coaches/me/video dans NestJS (auth COACH). Utiliser @UseInterceptors(FileInterceptor(""video"")) + MulterModule avec limits: { fileSize: 100*1024*1024 }. Valider mimetype : video/mp4 ou video/quicktime. Uploader sur Cloudinary : cloudinary.uploader.upload(file.path, { resource_type: ""video"", folder: ""elitcoach/coaches"" }). Mettre à jour CoachProfile.videoUrl. Retourner { videoUrl }.'","B-007, S-008",Terminé,MOYENNE,,,,
+V0.1 — AUTH & PROFILS,0.1,ADMIN,A-001,Endpoint Admin : Liste candidatures coach,"GET /api/admin/coaches?status=PENDING&page=1&limit=20 — Auth ADMIN, liste paginée avec infos User.","Prompt IA : 'Crée GET /api/admin/coaches dans NestJS (auth ADMIN via RolesGuard). Query params : status (CoachStatus, optionnel), page (default 1), limit (default 20). Prisma : findMany CoachProfile avec include User, where status si fourni, skip/take pour pagination. Retourner { data, total, page, limit }.'",B-005,Terminé,HAUTE,,,,
+V0.1 — AUTH & PROFILS,0.1,ADMIN,A-002,Endpoint Admin : Changer statut coach (pipeline 5 étapes),PATCH /api/admin/coaches/:id/status — Workflow PENDING→SCREENING→INTERVIEW→TEST→APPROVED/REJECTED. Email auto selon statut via Brevo.,"Prompt IA : 'Crée PATCH /api/admin/coaches/:id/status (auth ADMIN). Body : { status: CoachStatus, note: string }. Actions : 1) Mettre à jour CoachProfile.status + note. 2) Si APPROVED → isVerified=true. 3) Envoi email Brevo selon statut : SCREENING → ""Votre dossier est en cours d\'examen"" | INTERVIEW → ""Vous passez à l\'entretien, choisissez un créneau [Calendly]"" | TEST → ""Vous passez à la session test, voici les instructions"" | APPROVED → ""Bienvenue ! Voici votre badge Verified Coach"" | REJECTED → ""Après examen, nous ne pouvons pas vous accueillir [motif]"".'","A-001, S-008",Terminé,HAUTE,,,,
+V0.1 — AUTH & PROFILS,0.1,ADMIN,A-003,Endpoints Admin : Candidatures clients (liste + statut),GET /api/admin/clients + PATCH /api/admin/clients/:id/status — Même logique que coachs. Email APPROVED ou REJECTED.,"Prompt IA : 'Crée dans NestJS (auth ADMIN) : 1) GET /api/admin/clients?status=&page=1 → liste ClientProfiles avec User, paginée. 2) PATCH /api/admin/clients/:id/status : body { status: ClientStatus, note }. Si APPROVED → email ""Bienvenue ! Votre profil est actif, découvrez les coachs : [lien]"". Si REJECTED → email refus poli avec motif.'",B-005,Terminé,HAUTE,,,,
+V0.1 — AUTH & PROFILS,0.1,FRONTEND,F-001,Page Inscription Coach (5 étapes),Formulaire multi-étapes avec barre progression dorée. Étapes : infos base / expertise / tarifs+bio / vidéo / références. Style fond #0D0D0D accents #C9A84C. Tailwind pur.,"Prompt IA : 'Crée la page /register/coach pour ElitCoach by Zero to One. Next.js 14 App Router, Tailwind CSS, React Hook Form, Zod. 5 étapes avec barre de progression dorée en haut. ÉTAPE 1 : Prénom (requis), Nom (requis), Email (IsEmail), Password (min 8 chars 1 majuscule 1 chiffre), Confirm password. ÉTAPE 2 : Spécialités checkboxes (Business, Leadership, Life Coaching, Confiance en soi, Santé & Bien-être, Carrière, Relations, Performance), Années expérience (number min 1), Certifications (input tags : on tape + Entrée pour ajouter). ÉTAPE 3 : Tarif horaire (number min 50), Bio (textarea min 200 chars avec compteur de caractères). ÉTAPE 4 : Upload vidéo (input file accept mp4/mov max 100MB) OU lien YouTube/Vimeo avec preview embarquée si YouTube détecté. ÉTAPE 5 : 3 références (Nom, Email, Relation ex: ""Client coaché 6 mois""). Navigation : bouton Précédent / Suivant (valide l\'étape courante). Soumission → POST /api/auth/register/coach. Si 201 → page succès. Si 400 email existant → message sous le champ email. Style : fond #0D0D0D, accents #C9A84C, boutons fond doré texte noir, barre progression dorée, messages erreur rouge doux, animation fade entre étapes. Tailwind pur, zéro shadcn ni MUI.'","B-002, S-006",Terminé,CRITIQUE,,,,
+V0.1 — AUTH & PROFILS,0.1,FRONTEND,F-002,"Page Inscription Client (2 étapes, ton exclusif)",Formulaire qualification. Message dès le début : 'Nous sélectionnons nos clients aussi soigneusement que nos coachs.' Score < 60 → page refus. Score >= 60 → page attente.,"Prompt IA : 'Crée la page /register/client pour ElitCoach by Zero to One. Next.js 14, Tailwind CSS, React Hook Form, Zod. IMPORTANT afficher en haut dès le chargement : ""Nous sélectionnons nos clients aussi soigneusement que nos coachs."" ÉTAPE 1 : Prénom, Nom, Email, Password (min 8), Confirm password. ÉTAPE 2 (formulaire qualification, afficher en haut : ""Ces questions permettent de vérifier que le coaching est la bonne étape pour vous."") : Quel résultat précis en 3 mois (textarea min 100 chars, placeholder : ""Ex: Signer 3 nouveaux clients et atteindre 5000€ de CA mensuel"") | Comment mesureras-tu ce résultat (textarea min 50 chars) | Heures/semaine (select : Moins d\'1h / 1-2h / 2-4h / Plus de 4h) | Budget mensuel (select : Moins de 100€ / 100-300€ / 300-600€ / Plus de 600€) | Déjà travaillé avec un coach (radio Oui/Non, si Oui → textarea ""Quel résultat ? Pourquoi arrêté ?"") | Pourquoi maintenant (textarea min 100 chars). POST /api/auth/register/client. Si status=REJECTED → page : ""Après analyse, le coaching ne semble pas la bonne étape pour vous en ce moment."". Si status=PENDING → ""Votre candidature est en cours d\'analyse. Réponse sous 48h."". Fond #0D0D0D accents #C9A84C.'","B-003, S-006",Terminé,CRITIQUE,,,,
+V0.1 — AUTH & PROFILS,0.1,FRONTEND,F-003,Page Login,Connexion avec redirect selon rôle. Stocker accessToken localStorage + refreshToken cookie. Guard si déjà connecté.,"Prompt IA : 'Crée la page /login pour ElitCoach by Zero to One. Next.js 14, Tailwind CSS, React Hook Form, Zod. Contenu : Logo ""ElitCoach"" en grand + ""by Zero to One"" en #C9A84C dessous | Email (IsEmail) | Password (toggle afficher/masquer) | Bouton ""Se connecter"" fond doré | Lien ""Mot de passe oublié ?"" | Séparateur hr | 2 liens : ""Je suis coach — m\'inscrire"" → /register/coach + ""Je cherche un coach — candidater"" → /register/client | Lien discret en bas : ""Accès admin"". POST /api/auth/login. Selon role : COACH→/dashboard/coach | CLIENT→/dashboard/client | ADMIN→/admin. Stocker accessToken dans localStorage, refreshToken dans cookie. Guard : si token valide en localStorage → redirect immédiat selon role. Fond #0D0D0D, card centrée avec bordure dorée subtile.'","B-005, S-006",Terminé,CRITIQUE,,,,
+V0.1 — AUTH & PROFILS,0.1,FRONTEND,F-004,Page Confirmation Email,"Page /verify-email?token=xxx — Spinner pendant vérif, succès (check vert + Se connecter) ou erreur (X rouge + Renvoyer email).","Prompt IA : 'Crée la page /verify-email pour ElitCoach by Zero to One. Next.js 14 App Router, Tailwind CSS. La page lit le ?token= de l\'URL. Au montage : appeler GET /api/auth/verify-email?token=xxx. Pendant : spinner doré animé + ""Vérification en cours..."". Succès (200) : icône check vert + ""Email vérifié ! Vous pouvez vous connecter."" + bouton ""Se connecter"" → /login. Erreur (400) : icône X rouge + ""Ce lien est invalide ou a expiré."" + bouton ""Renvoyer un email de vérification"". Fond #0D0D0D, card centrée.'","B-004, S-006",Terminé,HAUTE,,,,
+V0.1 — AUTH & PROFILS,0.1,ADMIN,A-004,Interface Admin : Pipeline Coachs,Page /admin/coaches — Sidebar + tabs statuts avec compteurs + table + modal détails + lecteur vidéo + actions workflow.,"Prompt IA : 'Crée /admin/coaches pour ElitCoach by Zero to One. Next.js 14, Tailwind CSS. LAYOUT : sidebar gauche fixe #0D0D0D (liens : Dashboard/Coachs/Clients/Sessions/Paiements/Conversations/Alertes/Paramètres, texte actif doré) + zone principale #FAFAF8. CONTENU : 1) En-tête ""Pipeline Candidatures Coachs"" + badge rouge nb en attente. 2) Tabs : Tous/PENDING/SCREENING/INTERVIEW/TEST/APPROUVÉS/REFUSÉS (chaque tab affiche son count). 3) Table : Nom complet | Email | Spécialités (tags) | Certifications | Expérience | Tarif | Score | Date | Statut badge coloré | Actions (bouton ""Voir détails"" + dropdown ""Changer statut""). 4) Modal/Drawer ""Voir détails"" : toutes infos + player vidéo YouTube embarqué si videoUrl | notes admin textarea | 3 références | boutons ""Passer à Entretien/Test/Approuver/Refuser"" (chacun avec confirmation modale + champ motif). 5) Pagination. Charger : GET /api/admin/coaches?status=[tab]&page=. Changer statut : PATCH /api/admin/coaches/:id/status. Actualiser liste après changement.'","A-001, A-002",Terminé,HAUTE,,,,
+V0.1 — AUTH & PROFILS,0.1,ADMIN,A-005,Interface Admin : Pipeline Clients,Page /admin/clients — Identique à A-004. Score affiché avec barre colorée (rouge<60 / orange 60-75 / vert>75).,"Prompt IA : 'Crée /admin/clients pour ElitCoach by Zero to One. Next.js 14, Tailwind CSS. Sidebar identique à A-004 (composant réutilisé). CONTENU : 1) En-tête ""Candidatures Clients"" + compteur en attente. 2) Tabs : Tous/En attente/Approuvés/Refusés. 3) Table : Nom complet | Email | Objectif (tronqué 60 chars, tooltip complet au hover) | Budget | Score (barre colorée : rouge<60 / orange 60-75 / vert>75) | Date | Statut | Action ""Voir candidature"". 4) Modal ""Voir candidature"" : toutes les réponses du formulaire affichées proprement | détail calcul score (4 critères avec points obtenus) | champ note admin | boutons ""Approuver""/""Refuser"" (refus = motif obligatoire). GET /api/admin/clients | PATCH /api/admin/clients/:id/status. Style admin standard.'",A-003,Terminé,HAUTE,POST ÉTAPE — Publier après F-001 + F-002 + F-003 + A-004 + A-005 terminés,"ElitCoach v0.1 — ce qu'on vient de construire.
+
+Cette semaine :
+→ Inscription coachs (formulaire 5 étapes, validation vidéo, références)
+→ Qualification clients avec scoring automatique
+→ Login JWT (access token 15min + refresh token 7j)
+→ Pipeline admin pour gérer les candidatures
+
+La décision de design la plus importante :
+Les clients sont scorés automatiquement à l'inscription. Score < 60/100 → rejet immédiat.
+
+Critères : objectif précis / disponibilité / budget / historique coaching.
+
+98% des plateformes de coaching n'ont aucun filtre côté client.
+On a choisi le contraire.
+
+#buildinpublic #saas #elitcoach #zerotoone","ElitCoach v0.1 est terminé.
+
+Ce qu'on a buildé cette semaine :
+→ Inscription coachs (5 étapes + vidéo)
+→ Scoring automatique des clients (score < 60 = rejet)
+→ Login JWT double token
+→ Pipeline admin complet
+
+Le détail qui change tout :
+Les clients sont filtrés à l'inscription.
+98% des plateformes de coaching ne font pas ça.
+
+#buildinpublic #saas #elitcoach","Semaine 1 terminée sur ElitCoach ✅
+
+On a construit :
+→ Le formulaire d'inscription coachs en 5 étapes
+→ Un algorithme de scoring pour les clients (score < 60 = refus automatique)
+→ Le système de login JWT
+→ L'interface admin pour gérer les candidatures
+
+Pourquoi filtrer les clients ?
+Parce qu'un coach sérieux mérite des clients sérieux.
+
+Suite la semaine prochaine : réservation + paiement Stripe.
+
+#buildinpublic #elitcoach #saas #entrepreneuriat"
+V0.2 — RÉSERVATION & PAIEMENT,0.2,BACKEND,B-009,Modèle données Disponibilités & Sessions (Prisma),"Ajouter model Availability, model Session, enum SessionStatus dans le schema Prisma.","Prompt IA : 'Dans prisma/schema.prisma ajoute : model Availability (id UUID, coachId FK→CoachProfile, dayOfWeek Int 0-6, startTime String ""HH:MM"", endTime String, isActive Boolean default true, coach relation) | model Session (id UUID, coachId FK, clientId FK, scheduledAt DateTime, durationMins Int default 60, status SessionStatus default PENDING, price Int centimes, stripePaymentIntentId String?, zoomLink String?, coachNotes String?, cancelReason String?, cancelledBy String?, createdAt DateTime, coach relation, client relation) | enum SessionStatus { PENDING CONFIRMED COMPLETED CANCELLED NO_SHOW }. Commande : npx prisma migrate dev --name add_availability_sessions'",B-001,Terminé,CRITIQUE,,,,
+V0.2 — RÉSERVATION & PAIEMENT,0.2,BACKEND,B-010,Endpoint : Disponibilités Coach (POST + GET),POST /api/coaches/me/availability — Remplace tous les slots. GET /api/coaches/:coachId/availability?week= — Retourne créneaux dispo de la semaine.,"Prompt IA : '1) POST /api/coaches/me/availability (auth COACH APPROVED) : body { slots: [{dayOfWeek, startTime, endTime}] }. Valider absence de chevauchement. Transaction Prisma : deleteMany anciens slots + createMany nouveaux. Retourner { message, count }. 2) GET /api/coaches/:coachId/availability?week=YYYY-MM-DD (auth CLIENT) : Pour chaque slot Availability du coach, calculer la date réelle dans la semaine demandée (ex: dayOfWeek=1 → lundi de la semaine). Exclure les dates avec une Session CONFIRMED ou PENDING. Retourner { week, slots: [{date, startTime, endTime, available}] }.'",B-009,Terminé,CRITIQUE,,,,
+V0.2 — RÉSERVATION & PAIEMENT,0.2,BACKEND,B-011,Endpoint : Créer réservation (Stripe pre-auth),"POST /api/sessions — Vérif disponibilité, Stripe PaymentIntent capture_method=manual, créer Session PENDING. Retourner clientSecret.","Prompt IA : 'Crée POST /api/sessions dans NestJS (auth CLIENT status=APPROVED). Body : { coachId, scheduledAt: ISO8601, durationMins: 60 }. 1) Vérifier qu\'aucune Session CONFIRMED ou PENDING n\'existe pour ce coach à ce moment → sinon 409 { error: ""Créneau non disponible"" }. 2) Récupérer coach.hourlyRate. 3) price = hourlyRate * (durationMins/60), en centimes : price * 100. 4) stripe.paymentIntents.create({ amount: priceInCents, currency: ""eur"", capture_method: ""manual"", metadata: { sessionId: ""temp"", coachId, clientId } }). 5) Créer Session en Prisma avec status=PENDING + stripePaymentIntentId. 6) Mettre à jour le metadata Stripe avec le vrai sessionId. 7) Retourner { sessionId, stripeClientSecret: pi.client_secret, amount: priceInCents, currency: ""eur"" }.'","B-009, B-010, S-007",Terminé,CRITIQUE,,,,
+V0.2 — RÉSERVATION & PAIEMENT,0.2,BACKEND,B-012,Webhook Stripe : Confirmer + échouer paiement,POST /api/webhooks/stripe — payment_intent.succeeded → Session CONFIRMED + emails + rappel Bull Queue. payment_intent.payment_failed → Session CANCELLED.,"Prompt IA : 'Crée POST /api/webhooks/stripe dans NestJS. Header stripe-signature → stripe.webhooks.constructEvent(rawBody, sig, STRIPE_WEBHOOK_SECRET). Utiliser @RawBody() pour récupérer le body brut (configurer app.use(express.raw({ type: ""application/json"" })) dans main.ts). Événement payment_intent.succeeded : récupérer sessionId depuis metadata → Session.status=CONFIRMED + générer zoomLink (""https://zoom.us/j/"" + randomInt) + email coach ""Nouvelle session confirmée [date] [heure]"" + email client ""Votre session est confirmée, lien Zoom : [lien]"" + planifier job Bull Queue à H-24 et H-1. Événement payment_intent.payment_failed : Session.status=CANCELLED + email client ""Paiement échoué, votre créneau a été libéré"".'","B-011, S-007",Terminé,CRITIQUE,,,,
+V0.2 — RÉSERVATION & PAIEMENT,0.2,BACKEND,B-013,Endpoint : Annuler session (politique remboursement),DELETE /api/sessions/:id — >24h=100% / 4h-24h=50% / <4h=0%. Stripe refund auto. Session CANCELLED.,"Prompt IA : 'Crée DELETE /api/sessions/:id dans NestJS (auth COACH ou CLIENT propriétaire de la session). 1) Récupérer la session + vérifier ownership. 2) Calculer délai = session.scheduledAt - now(). 3) Si délai > 24h → refundRatio=1.0. Si délai > 4h → refundRatio=0.5. Sinon → refundRatio=0. 4) Si refundRatio > 0 → stripe.refunds.create({ payment_intent: session.stripePaymentIntentId, amount: Math.floor(session.price * refundRatio * 100) }). 5) Session.status=CANCELLED + cancelReason + cancelledBy (userId). 6) Email confirmation avec montant remboursé. 7) Retourner { message, refundAmount: price*refundRatio, refundStatus }.'",B-011,Terminé,CRITIQUE,,,,
+V0.2 — RÉSERVATION & PAIEMENT,0.2,BACKEND,B-014,Endpoint : Compléter session (Coach) + Commission 17%,"PATCH /api/sessions/:id/complete — Capturer paiement Stripe, commission ElitCoach 17%, email client avec lien avis.","Prompt IA : 'Crée PATCH /api/sessions/:id/complete dans NestJS (auth COACH). Body : { coachNotes: string }. Vérifications : session.status === CONFIRMED + session.scheduledAt < now. 1) Session.status=COMPLETED + coachNotes. 2) stripe.paymentIntents.capture(session.stripePaymentIntentId). 3) commission = session.price * 0.17, coachRevenue = session.price * 0.83. 4) Email client : ""Votre session est terminée. Comment s\'est-elle passée ? Laissez un avis : [lien]"". 5) Retourner la session complète.'",B-012,Terminé,HAUTE,,,,
+V0.2 — RÉSERVATION & PAIEMENT,0.2,BACKEND,B-015,Endpoints : Mes Sessions (Client + Coach) + Job rappels,GET /api/clients/me/sessions + GET /api/coaches/me/sessions paginés. Job Bull Queue rappel H-24 et H-1.,"Prompt IA : '1) GET /api/clients/me/sessions?status=&page=1 (auth CLIENT) : sessions du client avec infos coach (nom, photo), paginées. 2) GET /api/coaches/me/sessions?status=&page=1 (auth COACH) : sessions du coach avec infos client. 3) Créer SessionReminderJob dans Bull Queue : planifié depuis B-012 webhook. À H-24 : email coach + email client avec date/heure/lien Zoom. À H-1 : email court de rappel. Utiliser Bull Queue avec jobId pour éviter les doublons si webhook appelé plusieurs fois.'",B-012,Terminé,HAUTE,,,,
+V0.2 — RÉSERVATION & PAIEMENT,0.2,ADMIN,A-006,Endpoint + Interface Admin : Sessions,"GET /api/admin/sessions + page /admin/sessions — KPIs, table avec coach/client/prix/commission, forcer complétion, rembourser manuellement.","Prompt IA backend : 'Crée GET /api/admin/sessions?status=&page= (auth ADMIN). Retourner sessions avec coach+client+price+commission (price*0.17)+coachRevenue (price*0.83). Inclure totaux : { data, total, revenue: { total, commission, coachPayouts } }.' | Prompt IA frontend : 'Crée /admin/sessions pour ElitCoach. Next.js 14, Tailwind CSS. Sidebar admin identique. 4 KPI cards : Sessions ce mois / CA ce mois / Commission 17% / Taux complétion %. Tabs : Toutes/À venir/Terminées/Annulées. Table : Coach|Client|Date & Heure|Durée|Prix|Commission|Statut|Actions. Bouton ""Forcer complétion"" sur CONFIRMED dépassées. Bouton ""Rembourser manuellement"" sur COMPLETED (modal montant + raison). GET /api/admin/sessions.'",B-015,Terminé,HAUTE,,,,
+V0.2 — RÉSERVATION & PAIEMENT,0.2,FRONTEND,F-005,Page Disponibilités Coach (grille interactive),"Page /dashboard/coach/availability — Grille 7 jours × 24 créneaux, clic-glisser, récap, enregistrement. Linux : utiliser react-dnd ou simple mousedown/mousemove.","Prompt IA : 'Crée /dashboard/coach/availability pour ElitCoach. Next.js 14, Tailwind CSS. 1) En-tête ""Mes disponibilités"" + sous-titre ""Ces créneaux se répètent chaque semaine"". 2) Grille hebdomadaire interactive : 7 colonnes (Lun à Dim), lignes de 08h00 à 20h00 par tranches de 30 minutes. Chaque cellule cliquable (toggle actif/inactif). Cellule active fond doré #C9A84C, inactive fond #1A1A1A. Implémenter clic-glisser : onMouseDown début sélection, onMouseEnter si mouse enfoncée → toggle, onMouseUp fin. 3) Récap : ""X créneaux sélectionnés — X heures/semaine"". 4) Bouton ""Enregistrer"" → POST /api/coaches/me/availability. Au load : GET /api/coaches/me/availability pour pré-remplir. Toast ""Disponibilités enregistrées !"". Fond #0D0D0D.'","B-010, F-003",Terminé,HAUTE,,,,
+V0.2 — RÉSERVATION & PAIEMENT,0.2,FRONTEND,F-006,Page Réservation + Paiement Stripe,Page /coaches/[coachId]/book — Grille créneaux dispo + Stripe CardElement + confirmCardPayment + page succès.,"Prompt IA : 'Crée /coaches/[coachId]/book pour ElitCoach. Next.js 14, Tailwind CSS, Stripe.js. ÉTAPE 1 — Créneau : header coach (photo+nom+tarif). Navigation semaine (< / >). Grille créneaux : dispo=fond doré cliquable, réservé=gris texte ""Réservé"". GET /api/coaches/:coachId/availability?week=YYYY-MM-DD. Récap en bas quand sélectionné. Bouton ""Continuer"". ÉTAPE 2 — Paiement : récap Coach/Date/Heure/Durée 60min/Prix. Intégrer @stripe/react-stripe-js : <Elements stripe={stripePromise}><CardElement /></Elements>. Bouton ""Confirmer et payer X€"" → 1) POST /api/sessions → récupérer stripeClientSecret. 2) stripe.confirmCardPayment(clientSecret, { payment_method: { card: cardElement } }). 3) Si succès → page ""Votre session est confirmée ! Email avec lien Zoom envoyé."". 4) Si erreur → message Stripe sous formulaire. Fond #0D0D0D, card paiement avec icône cadenas, bordure dorée.'","B-011, S-007",Terminé,CRITIQUE,,,,
+V0.2 — RÉSERVATION & PAIEMENT,0.2,FRONTEND,F-007,Composant Mes Sessions (Client),3 onglets : À venir (Rejoindre Zoom actif 15min avant + Annuler avec modal) / Passées (lien Avis) / Annulées (montant remboursé).,"Prompt IA : 'Crée le composant Mes Sessions pour /dashboard/client/sessions. Next.js 14, Tailwind CSS. GET /api/clients/me/sessions. 3 onglets : 1) ""À venir"" (CONFIRMED future) : photo+nom coach | date française (""Lundi 21 avril à 09h00"") | 60 min | prix payé | bouton ""Rejoindre"" lien Zoom (disabled si >15min avant session, enabled sinon) | bouton ""Annuler"" (modal : ""Politique de remboursement : >24h=100%, 4h-24h=50%, <4h=0%"" + calcul du montant estimé + confirmation). 2) ""Passées"" (COMPLETED) : nom coach + date + ""Terminée"" + lien ""Laisser un avis"" si review absente. 3) ""Annulées"" (CANCELLED) : nom coach + date + raison + montant remboursé. Annulation → DELETE /api/sessions/:id → afficher toast avec montant. Fond #0D0D0D accents dorés.',","B-013, B-014, F-003",Terminé,HAUTE,POST ÉTAPE — Publier après F-006 + B-012 (premier paiement end-to-end fonctionnel),"Le paiement fonctionne sur ElitCoach — voici la logique complète.
+
+Stripe en pré-autorisation (capture manuelle) :
+→ À la réservation : l'argent est bloqué sur la carte, pas débité
+→ Quand la session est terminée : le coach clique ""Compléter"" → l'argent est capturé
+→ Commission ElitCoach : 17% automatique
+→ Si le coach ne complète pas : l'argent n'est jamais débité
+
+Politique d'annulation :
+→ >24h avant : remboursement 100%
+→ 4h-24h avant : remboursement 50%
+→ <4h avant : remboursement 0%
+
+Ce système protège les deux parties.
+Le coach ne peut pas disparaître. Le client peut annuler tôt.
+
+#buildinpublic #stripe #saas #elitcoach","Stripe live sur ElitCoach ✅
+
+Logique :
+→ Pré-auth à la réservation (argent bloqué, pas débité)
+→ Capture après session terminée
+→ 17% commission auto
+→ Annulation : >24h=100% / 4h-24h=50% / <4h=0%
+
+Le coach ne peut pas disparaître.
+Le client peut annuler tôt.
+
+Deux parties protégées.
+
+#buildinpublic #stripe #saas","Le paiement est intégré sur ElitCoach 💳
+
+On a choisi la pré-autorisation Stripe : l'argent est bloqué à la réservation mais capturé seulement après la session.
+
+Et la politique d'annulation est claire :
+→ Annuler >24h avant → remboursement 100%
+→ Annuler entre 4h et 24h avant → 50%
+→ Annuler <4h avant → 0%
+
+Respect mutuel coach/client par design.
+
+#buildinpublic #saas #elitcoach #stripe"
+V0.3 — MESSAGERIE,0.3,BACKEND,B-016,Modèle données Messagerie (Prisma),Ajouter model Conversation (@@unique coachId+clientId) + model Message + model Alert dans le schema.,"Prompt IA : 'Dans prisma/schema.prisma ajoute : model Conversation (id UUID, coachId FK→CoachProfile, clientId FK→ClientProfile, messages Message[], createdAt DateTime, @@unique([coachId, clientId])) | model Message (id UUID, conversationId FK, senderId String, content String, fileUrl String?, fileType String?, isRead Boolean default false, createdAt DateTime) | model Alert (id UUID, type String, userId String, conversationId String?, blockedContent String?, detectedPattern String?, isResolved Boolean default false, createdAt DateTime). Commande : npx prisma migrate dev --name add_messaging'",B-001,Terminé,CRITIQUE,,,,
+V0.3 — MESSAGERIE,0.3,BACKEND,B-017,Endpoints Messagerie REST (avec anti-bypass),GET conversations / GET messages / POST message (scan téléphone+email → bloquer + alerte) / POST fichier Supabase Storage.,"Prompt IA : 'Crée dans NestJS : 1) GET /api/conversations (auth COACH ou CLIENT) : conversations de l\'user avec otherPerson, lastMessage, unreadCount. 2) GET /api/conversations/:id/messages?page=1 : messages paginés, marquer tous reçus comme isRead=true. 3) POST /api/conversations/:id/messages (auth participant) : body { content }. ANTI-BYPASS : scanner content avec regex /([0-9]{2}[\s.-]{0,1}){4,}|@|\+33|\b07\b|\b06\b/. Si match → créer Alert(type=""BYPASS_ATTEMPT"", blockedContent=content, detectedPattern) + retourner 400 { error: ""Les coordonnées personnelles ne sont pas autorisées"" }. Si ok → créer Message + émettre Socket.io new_message à la room + si l\'autre n\'est pas connecté → email notif (max 1/h/conversation via Redis rate limiting). 4) POST /api/conversations/:id/messages/file : multipart, upload Supabase Storage bucket messages, créer Message avec fileUrl+fileType.'","B-016, S-007",Terminé,CRITIQUE,,,,
+V0.3 — MESSAGERIE,0.3,BACKEND,B-018,WebSocket Socket.io (NestJS Gateway),Configurer Socket.io Gateway. Auth JWT à la connexion. Events : join_conversation / new_message / typing_start / typing_stop / message_read.,"Prompt IA : 'Crée un MessagesGateway dans NestJS avec @WebSocketGateway({ cors: { origin: FRONTEND_URL } }). Auth : middleware WsJwtGuard qui lit le token dans handshake.auth.token et vérifie JWT (rejectUnauthorized si invalide). Events à gérer : @SubscribeMessage(""join_conversation"") → socket.join(conversationId) | @SubscribeMessage(""typing_start"") → this.server.to(room).emit(""typing_start"", { userId }) | @SubscribeMessage(""typing_stop"") → same. Méthode sendMessage(conversationId, messageData) appelable depuis le service REST → this.server.to(conversationId).emit(""new_message"", messageData). Méthode markRead(conversationId, messageId) → this.server.to(conversationId).emit(""message_read"", { messageId }).'",B-017,Terminé,HAUTE,,,,
+V0.3 — MESSAGERIE,0.3,BACKEND,B-019,Endpoints Admin : Modération + Alertes,GET /api/admin/conversations/:id/messages (lecture seule) | GET /api/admin/alerts | POST /api/admin/conversations (créer manuellement).,"Prompt IA : '1) GET /api/admin/conversations/:id/messages (auth ADMIN) : lire n\'importe quelle conversation pour modération, retourner messages complets. 2) GET /api/admin/alerts?type=BYPASS_ATTEMPT&page=1 (auth ADMIN) : liste Alerts non résolues avec userId, userName, conversationId, blockedContent, detectedPattern, createdAt. 3) POST /api/admin/conversations (auth ADMIN) : body { coachId, clientId } → créer Conversation ou retourner l\'existante si @@unique conflict.'",B-017,Terminé,HAUTE,,,,
+V0.3 — MESSAGERIE,0.3,FRONTEND,F-008,Interface Messagerie complète (Socket.io),Layout 2 colonnes. Liste conversations à gauche. Zone chat à droite avec temps réel. Typing indicator. Fichiers. Anti-bypass côté client.,"Prompt IA : 'Crée /messages pour ElitCoach. Next.js 14, Tailwind CSS, socket.io-client. LAYOUT 2 colonnes : GAUCHE (30%) : titre ""Messages"" | barre recherche filtrant les conversations | liste conversations (avatar initiales si pas de photo, nom, dernier message tronqué 50 chars, heure, badge rouge unread count, fond doré léger si conversation active). DROITE (70%) : si rien sélectionné → ""Sélectionnez une conversation"" centré. Si sélectionnée → header (photo+nom+statut) + zone messages scrollable (bulles : moi=droite fond doré, autre=gauche fond #1A1A1A, timestamp si >1h, icône fichier PDF/image cliquable, ""Lu ✓✓"" sur messages envoyés) + zone saisie (input multiline, Enter=envoyer, Shift+Enter=newline, bouton pièce jointe, bouton envoyer, indicateur ""En train d\'écrire..."" si typing event reçu). Socket.io : connecter à la connexion avec token JWT dans { auth: { token } }, join_conversation au changement de conversation, recevoir new_message+typing_start+typing_stop+message_read. ANTI-BYPASS client : si input contient pattern téléphone/email → bloquer + afficher toast ""Coordonnées personnelles non autorisées. Toutes les communications doivent rester sur ElitCoach."" GET/POST /api/conversations. Fond #0D0D0D.',","B-017, B-018",Terminé,CRITIQUE,,,,
+V0.3 — MESSAGERIE,0.3,ADMIN,A-007,Interface Admin : Modération Conversations,Page /admin/conversations — Section alertes bypass + liste conversations + vue lecture seule + Suspendre/Avertir.,"Prompt IA : 'Crée /admin/conversations pour ElitCoach. Next.js 14, Tailwind CSS. Sidebar admin identique. CONTENU : 1) Section ""Alertes"" (fond rouge très léger si alerts > 0) : tableau tentatives bypass (Nom utilisateur / Conversation / Contenu bloqué / Pattern détecté / Date / Bouton ""Voir conversation""). 2) Liste toutes les conversations : Coach + Client + nb messages + date dernier message + bouton ""Consulter"". 3) Vue conversation : lecture seule avec même UI que F-008 + bouton ""Suspendre cette conversation"" (POST /api/admin/conversations/:id/suspend) + bouton ""Avertir les participants"" (email automatique). GET /api/admin/alerts + GET /api/admin/conversations/:id/messages.',",B-019,Terminé,HAUTE,POST ÉTAPE — Publier après F-008 (messagerie temps réel opérationnelle),"La messagerie d'ElitCoach est en ligne — et elle a une feature inhabituelle.
+
+Si tu essaies d'envoyer ton numéro de téléphone ou ton email dans le chat :
+→ Le message est bloqué côté client
+→ S'il passe quand même → bloqué côté serveur
+→ Une alerte est générée pour l'admin avec le contenu bloqué
+
+Pourquoi cette contrainte ?
+
+Notre modèle économique : 17% de commission sur chaque session.
+Si coaches et clients échangent leurs coordonnées et passent hors plateforme, on perd tout.
+C'est un risque réel pour toute marketplace de services.
+
+On a choisi de l'adresser directement par le design, pas par la confiance.
+
+#buildinpublic #saas #elitcoach #productdesign","La messagerie ElitCoach bloque les numéros et emails dans les chats.
+
+Douloureuse décision ou évidence ?
+
+Le modèle : 17% de commission par session.
+Si les gens passent hors plateforme → 0€.
+
+La solution : anti-bypass par design.
+→ Détection regex côté client
+→ Validation serveur
+→ Alerte admin automatique
+
+C'est comme ça que les marketplaces survivent.
+
+#buildinpublic #saas #elitcoach","La messagerie est live sur ElitCoach 💬
+
+Mais avec une particularité : les numéros de téléphone et adresses email sont bloqués dans les conversations.
+
+Oui, c'est intentionnel.
+
+Notre commission (17%) ne fonctionne que si les échanges restent sur la plateforme. On a donc intégré une protection anti-contournement directement dans le produit.
+
+C'est un choix de design difficile mais nécessaire pour la viabilité du business.
+
+#buildinpublic #elitcoach #saas #entrepreneuriat"
+V0.4 — SUIVI OBJECTIFS,0.4,BACKEND,B-020,Modèle données Objectifs (Prisma),"Ajouter Goal, GoalStep, CheckIn dans le schema Prisma.","Prompt IA : 'Dans prisma/schema.prisma ajoute : model Goal (id UUID, coachId FK→CoachProfile, clientId FK→ClientProfile, title String, description String?, targetDate DateTime, progress Int default 0, status GoalStatus default ACTIVE, steps GoalStep[], checkIns CheckIn[], createdAt+updatedAt) | enum GoalStatus { ACTIVE COMPLETED ABANDONED } | model GoalStep (id UUID, goalId FK, title, dueDate DateTime?, isCompleted Boolean default false, completedAt DateTime?, order Int) | model CheckIn (id UUID, goalId FK, clientId String, answers Json, coachNote String?, createdAt). npx prisma migrate dev --name add_goals'",B-001,Terminé,CRITIQUE,,,,
+V0.4 — SUIVI OBJECTIFS,0.4,BACKEND,B-021,Endpoints CRUD Objectifs + Steps + Check-ins,POST /api/goals | GET /api/goals | PATCH steps | PATCH progress | POST checkins | PATCH checkin note | Job cron lundi 8h.,"Prompt IA : '1) POST /api/goals (auth COACH) : body { clientId, title, description, targetDate, steps[] }. Vérifier ≥1 session COMPLETED/CONFIRMED avec ce client. Créer Goal + GoalSteps. Email client notif. 2) GET /api/goals (auth COACH ou CLIENT) : COACH peut filtrer ?clientId=. CLIENT → ses objectifs. Retourner avec stepsTotal+stepsCompleted. 3) PATCH /api/goals/:goalId/steps/:stepId (auth COACH ou CLIENT lié) : { isCompleted }. Recalculer progress=(completed/total)*100. Si toutes complètes → status=COMPLETED. Notifier l\'autre partie. 4) PATCH /api/goals/:goalId/progress (auth COACH) : { progress: 0-100 }. 5) POST /api/goals/:goalId/checkins (auth CLIENT lié) : { answers: { q1..q5 } }. 6) PATCH /api/goals/:goalId/checkins/:checkinId (auth COACH) : { coachNote }. 7) Cron job Bull Queue (0 8 * * 1 = lundi 8h) : envoyer email à tous les clients avec ≥1 objectif ACTIVE : ""N\'oubliez pas votre check-in hebdomadaire [lien]"".',","B-020, B-015",Terminé,HAUTE,,,,
+V0.4 — SUIVI OBJECTIFS,0.4,FRONTEND,F-009,Page Objectifs Client (barre progression + check-in),Page /dashboard/client/goals — Cards objectifs avec grande barre dorée + étapes cliquables + formulaire check-in 5 questions.,"Prompt IA : 'Crée /dashboard/client/goals pour ElitCoach. Next.js 14, Tailwind CSS. GET /api/goals. Pour chaque objectif, une card : 1) En-tête : titre gras + ""Objectif pour le [date]"" + badge (ACTIF=vert / COMPLÉTÉ=doré / ABANDONNÉ=gris). 2) Barre de progression centrale TRÈS visible : grande barre bg doré 0→100%, pourcentage en grand (ex: ""67%"") au-dessus, ""X étapes complétées sur Y"" en dessous. 3) Accordéon étapes : checkbox (PATCH .../steps/:stepId), titre, date limite, badge ""En retard"" rouge si dueDate dépassée. 4) Section check-ins : si pas fait cette semaine → bouton prominent ""Faire mon check-in"" fond doré. Si déjà fait → ""✓ Check-in de la semaine effectué"". Les 3 derniers check-ins en accordéon (réponses + note coach si présente). Modal check-in : 5 textareas : ""Qu\'as-tu accompli depuis la dernière session ?"" / ""Qu\'est-ce qui fonctionne bien ?"" / ""Sur 10, comment te sens-tu par rapport à ton objectif ?"" / ""Quelle est ta principale difficulté ?"" / ""Quel est ton objectif pour les 7 prochains jours ?"". POST /api/goals/:goalId/checkins. Fond #0D0D0D, barre dorée très visible.',",B-021,Terminé,HAUTE,,,,
+V0.4 — SUIVI OBJECTIFS,0.4,FRONTEND,F-010,Page Objectifs Coach (vue clients + créer objectif),Page /dashboard/coach/clients — Liste clients + page détail client + slider % + modal créer objectif avec étapes dynamiques.,"Prompt IA : 'Crée /dashboard/coach/clients pour ElitCoach. Next.js 14, Tailwind CSS. GET /api/coaches/me/clients. Carte par client : photo+nom, objectifs actifs (titre+barre%), prochain check-in attendu, bouton ""Voir profil complet"" → /dashboard/coach/clients/:clientId. Page détail /:clientId : header client + bouton ""Créer un objectif"" (ouvre modal). Liste objectifs : barre progression, étapes cliquables (PATCH), slider % global (range input → PATCH /api/goals/:goalId/progress), check-ins du client avec réponses + textarea note coach (PATCH .../checkins/:id). Modal ""Créer objectif"" : titre, description, date picker, liste étapes dynamique (bouton + pour ajouter une étape, bouton × pour supprimer, drag-and-drop pour réordonner via @dnd-kit/core ou html5 natif) → POST /api/goals. Fond #0D0D0D.',",B-021,Terminé,HAUTE,POST ÉTAPE — Publier après F-009 + F-010 (suivi objectifs actif),"Le vrai différenciateur d'ElitCoach vient d'être buildé : le suivi d'objectifs mesurables.
+
+Voici ce que ça change concrètement :
+
+Sans ElitCoach :
+→ Session → ""c'était bien"" → session suivante
+→ Résultat : impressions subjectives
+
+Avec ElitCoach :
+→ Le coach crée des objectifs avec des étapes et des dates
+→ La progression est en % en temps réel
+→ Chaque lundi : formulaire de check-in automatique (5 questions)
+→ Le coach lit et commente les check-ins
+→ Tout est traçable, exportable, mesurable
+
+C'est ça qui justifie le pricing premium.
+Pas juste une session de 60 minutes. Un processus documenté vers un résultat.
+
+#buildinpublic #elitcoach #saas #coaching","Le suivi d'objectifs est live sur ElitCoach.
+
+Avant : session → ""c'était bien"" → session suivante.
+Après : objectifs mesurables + étapes datées + % progression + check-ins hebdomadaires.
+
+Le coach et le client voient la même chose.
+En temps réel.
+
+C'est ça le coaching premium.
+
+#buildinpublic #elitcoach #saas","Nouvelle fonctionnalité sur ElitCoach : le suivi d'objectifs en temps réel 📊
+
+Le coach définit des objectifs avec des étapes et des dates.
+Le client voit sa progression en pourcentage.
+Chaque lundi, un formulaire de check-in automatique est envoyé (5 questions clés).
+
+La plupart des plateformes de coaching vendent juste des sessions.
+Nous vendons des résultats mesurables.
+
+C'est la différence.
+
+#buildinpublic #elitcoach #coaching #entrepreneuriat"
+V0.5 — DASHBOARDS,0.5,BACKEND,B-022,Endpoints Dashboard Coach + Client + Score Crédibilité,GET /api/coaches/me/dashboard (KPIs + chart) | GET /api/clients/me/dashboard | GET /api/coaches/:id/credibility (algo 0-1000).,"Prompt IA : '1) GET /api/coaches/me/dashboard (auth COACH) : { revenue: { currentMonth, lastMonth, total, nextPayout: { amount, date } }, sessions: { thisMonth, upcoming, completionRate }, clients: { active, total }, rating: { average, total, breakdown: {5:x,4:x,...} }, credibilityScore, revenueChart: [{month, amount}] 6 derniers mois }. 2) GET /api/clients/me/dashboard (auth CLIENT) : { activeGoals, avgProgress, sessionsCompleted, nextSession: { coach, scheduledAt, zoomLink }, totalSpent, checkInStreak }. 3) GET /api/coaches/:id/credibility : score = (avgRating/5)*400 + (goalsCompleted/max(totalGoals,1))*300 + min(sessionsThisMonth/10*200,200) + min(moisSurPlateforme/12*100,100). Retourner { score, breakdown: { reviews, successRate, activity, seniority }, rank: ""Top X%"" }.',","B-014, B-021",Terminé,HAUTE,,,,
+V0.5 — DASHBOARDS,0.5,BACKEND,B-023,Endpoint : Avis client (POST review),POST /api/sessions/:sessionId/review — Rating 1-5 + critères (écoute/méthodo/résultats/ponctualité). Recalcul score crédibilité coach.,"Prompt IA : 'Crée POST /api/sessions/:sessionId/review (auth CLIENT). Body : { rating: 1-5, comment, criteria: { listening, methodology, results, punctuality } chacun 1-5 }. Vérifications : session.status === COMPLETED + clientId correspond + aucun avis existant pour cette session (table Review). Créer l\'avis. Recalculer CoachProfile.score (GET credibility et sauvegarder). Notifier le coach par email. Retourner { review }.'",B-022,Terminé,HAUTE,,,,
+V0.5 — DASHBOARDS,0.5,FRONTEND,F-011,Dashboard Coach (Recharts + score crédibilité),Page /dashboard/coach — Sidebar + bienvenue + 4 KPI + score crédibilité + LineChart + prochaines sessions + clients à relancer.,"Prompt IA : 'Crée /dashboard/coach pour ElitCoach. Next.js 14, Tailwind CSS, Recharts. GET /api/coaches/me/dashboard. LAYOUT : sidebar #1A1A1A (liens : Dashboard⭐/Disponibilités/Clients/Sessions/Messages/Profil/Déconnexion) + zone principale #0D0D0D. CONTENU : 1) Bienvenue : ""Bonjour [Prénom] 👋"" + date + badge ""✓ Verified Coach"" doré si isVerified. 2) 4 KPI cards fond #1A1A1A : Revenus ce mois (+ flèche ↑↓ vs mois précédent) | Sessions ce mois + taux complétion % | Clients actifs | Note moyenne étoiles + nb avis. 3) Score crédibilité : grand chiffre central /1000 + 4 barres progress (Avis/Réussite/Activité/Ancienneté) + badge rank ""Top 15%"" doré. 4) LineChart Recharts : 6 mois, stroke=#C9A84C, dots dorés, tooltips, axe Y en €. 5) Prochaines sessions (3 max) : client + date/heure formatée + bouton ""Lien Zoom"". 6) Clients à relancer (sans session >21j, 3 max) : bouton ""Envoyer message"" → /messages?to=[id].',","B-022, F-003",Terminé,HAUTE,,,,
+V0.5 — DASHBOARDS,0.5,FRONTEND,F-012,Dashboard Client,Page /dashboard/client — Widget prochaine session très visible + objectifs + 3 stats + check-in hebdomadaire.,"Prompt IA : 'Crée /dashboard/client pour ElitCoach. Next.js 14, Tailwind CSS. GET /api/clients/me/dashboard. LAYOUT sidebar (Dashboard/Objectifs/Sessions/Mon coach/Messages/Profil/Déconnexion) + zone principale #0D0D0D. CONTENU : 1) ""Bonjour [Prénom]"" + date du jour. 2) Widget ""PROCHAINE SESSION"" très proéminent (fond doré léger #C9A84C20, border dorée) : photo+nom coach | date+heure en grand | countdown ""Dans X jours X heures"" | bouton ""Rejoindre"" (disabled si >15min avant, enabled sinon) | si pas de session → ""Aucune session prévue — Réserver une session →"" lien /coaches. 3) Objectifs actifs : pour chaque ACTIVE : titre + date cible + grande barre progress dorée + ""X/Y étapes"". Lien ""Voir tous mes objectifs"". 4) 3 cards stats : Sessions complétées / Total investi en coaching (X€) / Check-in streak (""4 semaines consécutives ✓""). 5) Check-in semaine : si pas fait → bouton prominent fond doré ""Faire mon check-in"". Si fait → ""✓ Check-in de la semaine effectué"".',","B-022, F-003",Terminé,HAUTE,,,,
+V0.5 — DASHBOARDS,0.5,FRONTEND,F-013,Page Profil Public Coach (SEO),Page /coaches/[slug] — Public. Hero + bio + vidéo + spécialités + avis. CTA réservation. Fond #FAFAF8.,"Prompt IA : 'Crée /coaches/[slug] pour ElitCoach. Next.js 14 App Router avec generateMetadata pour SEO. Fond #FAFAF8 (page publique lisible). GET /api/coaches/:id/public (public). SECTIONS : 1) HERO : grande photo gauche (initiales si absent) | à droite : nom en grand + badge ""✓ Verified Coach"" fond doré | tags spécialités cliquables | étoiles+note+(X avis) | ""Score ElitCoach : 847/1000"" | ""120€ / session"" | CTA ""Réserver une session"" → /coaches/[id]/book (gros bouton doré). 2) À PROPOS : bio complète | certifications (badges visuels ICF PCC etc) | années expérience. 3) VIDÉO : player YouTube/Vimeo embarqué + titre ""Découvrez mon approche coaching"". 4) SPÉCIALITÉS : icône + description courte pour chaque. 5) AVIS (5 derniers) : étoiles + commentaire + date + initiales client. 6) CTA BAS DE PAGE : fond doré, ""Prêt à commencer ?"" + bouton réservation.',","B-022, B-023",Terminé,HAUTE,POST ÉTAPE — Publier après F-011 + F-012 (dashboards actifs),"Les dashboards ElitCoach sont live — voici comment on mesure la performance d'un coach.
+
+Le score de crédibilité (0-1000) est calculé automatiquement :
+
+40% — Avis clients (note moyenne / 5) × 400
+30% — Taux de réussite objectifs (objectifs complétés / total)
+20% — Activité récente (sessions ce mois, plafonné à 10)
+10% — Ancienneté sur la plateforme
+
+Pourquoi ce score ?
+Parce que sur une marketplace, la réputation ne doit pas être achetable.
+Pas de mise en avant payante. Pas de boost.
+Seulement les données réelles.
+
+Un coach qui obtient des résultats monte. C'est la seule règle.
+
+#buildinpublic #elitcoach #saas #algorithmique","Le score de crédibilité ElitCoach : 0 à 1000 calculé en temps réel.
+
+40% → avis clients
+30% → taux de réussite objectifs
+20% → activité récente
+10% → ancienneté
+
+Pas de boost payant. Pas de mise en avant.
+Juste les données.
+
+Le mérite, pas le budget pub.
+
+#buildinpublic #elitcoach #saas","Comment on note les coaches sur ElitCoach ?
+
+On a créé un score de crédibilité de 0 à 1000 calculé automatiquement :
+→ 40% basé sur les avis clients
+→ 30% sur le taux de réussite des objectifs
+→ 20% sur l'activité récente
+→ 10% sur l'ancienneté
+
+Pas de mise en avant payante. Seulement la performance réelle.
+
+C'est comme ça que les clients trouvent les meilleurs coaches.
+
+#buildinpublic #elitcoach #coaching #entrepreneuriat"
+V0.6 — ADMIN COMPLET,0.6,BACKEND,B-024,Endpoint Admin : Dashboard global,"GET /api/admin/dashboard — MRR+croissance, coachs/clients actifs/totaux, sessions, revenus+commission, NPS, churn, alertes, charts.","Prompt IA : 'Crée GET /api/admin/dashboard (auth ADMIN). Calculer : mrr (commission reçue ce mois) | mrrGrowth (% vs mois précédent) | totalCoaches + activeCoaches (status=APPROVED, ≥1 session ce mois) | totalClients + activeClients | sessionsThisMonth | revenue { thisMonth, commission (×0.17), coachPayouts (×0.83) } | nps (avgRating globale) | churnRate (clients sans session ce mois / total) | pendingCoaches | pendingClients | alerts (nb Alert isResolved=false) | revenueChart (6 mois, commission par mois) | coachAcceptanceRate (APPROVED/total candidatures) | clientAcceptanceRate (APPROVED/total candidatures).',","B-014, B-021, B-023",Terminé,HAUTE,,,,
+V0.6 — ADMIN COMPLET,0.6,BACKEND,B-025,Endpoints Admin : Suspension + Ban + Métriques Finance,PATCH /api/admin/users/:id/suspend (annuler sessions+email). DELETE /api/admin/users/:id (ban+anonymiser RGPD). GET /api/admin/finance?period=.,"Prompt IA : '1) PATCH /api/admin/users/:id/suspend : { reason, duration: days }. User.suspended=true + suspendedUntil=now+duration. Annuler sessions futures + remboursement 100% Stripe. Email motif+durée+procédure recours. 2) DELETE /api/admin/users/:id : { reason }. User status=BANNED. Annuler+rembourser sessions futures. RGPD : User.email=""anon_""+uuid+""@deleted.com"", firstName=""Anonymisé"", lastName="""". Email motif+procédure recours. 3) GET /api/admin/finance?period=YYYY-MM : { grossRevenue, commissions (×0.17), coachPayouts (×0.83), refunds, netRevenue, sessionsByCoach: [{ coachId, name, sessions, revenue, payout }] triés par revenue desc }.',","B-013, B-014",Terminé,HAUTE,,,,
+V0.6 — ADMIN COMPLET,0.6,FRONTEND,A-008,Dashboard Admin + Page Paiements,Page /admin — 8 KPI + BarChart Recharts + section en attente + top 5 coachs. Page /admin/finance — sélecteur période + 4 cards + tableau + export CSV.,"Prompt IA Dashboard : 'Crée /admin pour ElitCoach. Next.js 14, Tailwind CSS, Recharts. Auth : redirect si role != ADMIN. GET /api/admin/dashboard. LAYOUT : sidebar #0D0D0D (liens admin) + zone principale #FAFAF8. CONTENU : 1) ""Dashboard ElitCoach"" + date/heure. 2) Bandeau orange si alerts > 0. 3) 8 KPI cards 2 lignes : MRR+% / Sessions / Commission / NPS | Coachs actifs / Clients actifs / Taux acceptation coach% / Churn%. 4) BarChart Recharts 6 mois : 2 barres (revenu brut #C9A84C + commission #333). 5) Cards en attente avec boutons. 6) Tableau top 5 coachs. Accents dorés.' | Prompt IA Finance : 'Crée /admin/finance. Sélecteur mois/année. 4 cards financières (brut/commissions/reversements/remboursements). Tableau par coach avec export CSV (téléchargement fichier CSV via Blob). Section remboursements du mois.'","B-024, B-025",Terminé,HAUTE,POST ÉTAPE — Publier après A-008 (admin complet actif),"L'admin d'ElitCoach est terminé. Voici ce qu'on peut faire depuis le back-office.
+
+Gestion des utilisateurs :
+→ Pipeline validation coaches (5 étapes)
+→ Approbation/rejet clients avec score automatique
+→ Suspension temporaire (X jours + annulation sessions + email)
+→ Ban permanent avec anonymisation RGPD automatique
+
+Financier :
+→ MRR en temps réel + croissance MoM
+→ Commissions par coach (17%)
+→ Export CSV des métriques financières
+→ Forcer remboursement en cas de litige
+
+Sécurité :
+→ Alertes anti-bypass en temps réel
+→ Lecture de n'importe quelle conversation (modération)
+→ Suspension de conversations
+
+Un admin de ce niveau = une plateforme qui peut scaler sans perdre le contrôle.
+
+#buildinpublic #saas #elitcoach #backoffice","L'admin ElitCoach : ce qu'il faut pour garder le contrôle à l'échelle.
+
+→ Pipeline coaching en 5 étapes
+→ Scoring client automatique
+→ Suspension / ban + RGPD automatique
+→ MRR + commissions en temps réel
+→ Anti-bypass avec alertes
+→ Export CSV
+
+Pas de contrôle = pas de qualité.
+
+#buildinpublic #saas #elitcoach","Le back-office d'ElitCoach est complet 🔧
+
+Ce qu'on peut faire depuis l'admin :
+→ Gérer tout le pipeline de validation des coaches
+→ Voir les métriques financières en temps réel (MRR, commissions, reversements)
+→ Bannir un utilisateur avec anonymisation RGPD automatique
+→ Voir et modérer toutes les conversations
+→ Exporter les données en CSV
+
+C'est le niveau de contrôle nécessaire pour maintenir une qualité premium à l'échelle.
+
+#buildinpublic #elitcoach #saas #entrepreneuriat"
+V0.7 — RECHERCHE & MATCHING,0.7,BACKEND,B-026,Endpoints : Liste coachs publics (filtres) + Profil public + Matching,GET /api/coaches (filtres+pagination) | GET /api/coaches/:idOrSlug/public (10 avis+score) | GET /api/clients/me/suggested-coaches (3-5 matches).,"Prompt IA : '1) GET /api/coaches?specialty=&minRate=&maxRate=&minScore=&page=1&limit=12 (public) : coaches APPROVED filtrés, triés par score desc. 2) GET /api/coaches/:idOrSlug/public : profil public complet + 10 derniers avis + credibilityScore. Accepter UUID ou slug. 3) GET /api/clients/me/suggested-coaches (auth CLIENT APPROVED) : extraire mots-clés de client.objective (split + stopwords). Trouver coaches dont specialties.some(s => keywords.includes(s.toLowerCase())). Trier par credibilityScore desc. Exclure coaches avec sessions déjà passées avec ce client. Retourner 3-5 { coach, matchScore, matchReasons: [""Spécialiste business"", ""95% taux réussite"", ""Disponible cette semaine""] }.',",B-023,Terminé,HAUTE,,,,
+V0.7 — RECHERCHE & MATCHING,0.7,FRONTEND,F-014,Page Recherche + Landing Page Publique,Page /coaches — Filtres 25% + grille 75% + section Pour Vous. Page / — Landing 8 sections responsive (Navbar/Hero/Problème/Solution/Coachs/Clients/Comparatif/Footer).,"Prompt IA Recherche : 'Crée /coaches pour ElitCoach. Next.js 14, Tailwind CSS. Layout : 25% filtres gauche + 75% liste droite. FILTRES : Spécialités checkboxes / Budget slider double 50-500€ / Score min ElitCoach slider 0-1000 / Note min radio 1-5 étoiles / Réinitialiser. LISTE : ""X coachs disponibles"" + section ""Pour vous"" (fond #C9A84C15 border dorée, visible seulement si client connecté, 2-3 cards avec badge ""Recommandé pour vous"") + grille 2 colonnes (card : photo/initiales, ✓ Verified badge doré, nom, tags spécialités, étoiles+note+avis, barre score ElitCoach, prix/session, bouton ""Voir profil""). Pagination. Filtres → URL query params → nouvelle requête. Fond #0D0D0D, cards #1A1A1A hover border dorée.' | Prompt IA Landing : 'Crée / pour ElitCoach. Next.js 14, Tailwind CSS, responsive mobile. 8 sections : NAVBAR (logo+liens+CTA) | HERO (badge+H1+sous-titre+2 CTA+stat bar) | PROBLÈME (3 cards fractures) | SOLUTION (2 colonnes : processus coachs 5 étapes + qualification clients) | POUR LES COACHS (4 avantages+CTA) | POUR LES CLIENTS (4 avantages+CTA) | COMPARATIF tableau ElitCoach vs BetterUp vs Noomii | FOOTER (logo+tagline+liens). Fond #FAFAF8, accents #C9A84C.'",B-026,Terminé,HAUTE,POST ÉTAPE — Publier après F-014 (recherche + landing en ligne),"La recherche de coachs et la landing page ElitCoach sont en ligne.
+
+Mais ce qui est intéressant c'est l'algorithme de matching.
+
+Quand un client approuvé accède à /coaches, l'algorithme analyse son objectif déclaré à l'inscription et lui propose 3 à 5 coachs avec :
+→ Un score de correspondance en %
+→ Les raisons du match : ""Spécialiste business"", ""95% de taux de réussite"", ""Disponible cette semaine""
+
+Pas de mise en avant payante.
+Pas de dark pattern.
+Seulement la correspondance réelle entre l'objectif du client et le profil du coach.
+
+La qualité est notre seul produit.
+
+#buildinpublic #elitcoach #saas #productdesign","Le matching ElitCoach : pas d'algo caché.
+
+Clients → objectif déclaré à l'inscription.
+Algo → extrait les mots-clés → trouve les coaches correspondants → trie par score crédibilité.
+
+Résultat : 3-5 suggestions avec score de match + raisons.
+
+Zéro mise en avant payante. Zéro dark pattern.
+Juste les données.
+
+#buildinpublic #elitcoach #saas","Le moteur de recherche et la landing page ElitCoach sont en ligne 🔍
+
+La fonctionnalité qui me rend fier : le matching.
+
+Quand un client se connecte, l'algorithme lit son objectif déclaré et lui suggère les coaches les plus adaptés avec un score de correspondance et des explications claires.
+
+Aucune mise en avant payante. Aucun boost.
+Seulement la pertinence réelle.
+
+elitcoach.co — allez voir.
+
+#buildinpublic #elitcoach #saas #entrepreneuriat"
+V1.0 — QA & DÉPLOIEMENT,1.0,INFRA,B-027,Variables d'env production + Tests E2E,Créer .env.production avec tous les secrets forts. Écrire 9 tests Jest+Supertest prioritaires.,"Variables .env.production : DATABASE_URL=postgresql://...supabase.co:5432/postgres | JWT_SECRET=$(node -e ""console.log(require('crypto').randomBytes(64).toString('hex'))"") | JWT_REFRESH_SECRET=idem | STRIPE_SECRET_KEY=sk_live_... | STRIPE_WEBHOOK_SECRET=whsec_... | BREVO_API_KEY=... | CLOUDINARY_URL=... | SUPABASE_URL/KEY | REDIS_URL=rediss://...upstash.io:6380 | FRONTEND_URL=https://elitcoach.co | NODE_ENV=production | PORT=3001. Tests Jest+Supertest : 1) POST /register/coach → 201. 2) /register/client score<60 → REJECTED. 3) /login mauvais password → 401. 4) POST /sessions créneau pris → 409. 5) DELETE /sessions >24h → refund 100%. 6) DELETE /sessions <4h → refund 0%. 7) POST message avec téléphone → 400. 8) Webhook payment_intent.succeeded → session CONFIRMED. 9) GET /admin/dashboard sans auth → 403.","S-007, S-008",Terminé,CRITIQUE,,,,
+V1.0 — QA & DÉPLOIEMENT,1.0,INFRA,B-028,Déploiement Railway (Backend) + Vercel (Frontend),"Railway : connecter repo, env vars, healthcheck /api/health, domaine api.elitcoach.co. Vercel : connecter repo, NEXT_PUBLIC_*, domaine elitcoach.co.","Railway (Linux-friendly) : 1) railway login (CLI Linux : npm i -g @railway/cli). 2) railway new → lier /backend. 3) Configurer toutes les env vars (.env.production). 4) Créer GET /api/health → 200 { status: 'ok', timestamp: new Date() }. 5) Configurer healthcheck. 6) Domaine custom api.elitcoach.co. | Vercel : 1) npm i -g vercel. 2) vercel --cwd /frontend deploy. 3) NEXT_PUBLIC_API_URL=https://api.elitcoach.co | NEXT_PUBLIC_STRIPE_KEY=pk_live_... 4) Domaine elitcoach.co. 5) Redirect www→non-www.","B-027, S-010",Terminé,CRITIQUE,,,,
+V1.0 — QA & DÉPLOIEMENT,1.0,INFRA,B-029,Config Supabase RLS + Stripe Live + Cloudflare DNS,Supabase : activer RLS toutes les tables + policies. Stripe : passer en live + webhook prod. Cloudflare : DNS + WAF + HTTPS.,Supabase : activer RLS sur chaque table → policies : coach voit ses données / client voit les siennes / admin voit tout. Backups quotidiens. | Stripe Live : Dashboard → activer live mode → webhook endpoint https://api.elitcoach.co/api/webhooks/stripe → events : payment_intent.succeeded + payment_intent.payment_failed → copier STRIPE_WEBHOOK_SECRET → update Railway env. | Cloudflare : ajouter domaine elitcoach.co → A record → IP Vercel | CNAME api → Railway. Activer WAF. Activer caching /_next/static/*. SSL/TLS : Full Strict.,B-028,À faire (toi),CRITIQUE,,,,
+V1.0 — QA & DÉPLOIEMENT,1.0,MARKETING,M-001,Recrutement coachs fondateurs (pre-launch),"Avant le lancement public, recruter 10-15 premiers coachs via LinkedIn DM. Objectif : avoir des profils disponibles dès le lancement.","Actions : 1) Identifier 50 coachs ICF PCC/EMCC sur LinkedIn (filtre : coach certifié + 500+ abonnés + actif). 2) DM personnalisé : ""Bonjour [Prénom], je lance ElitCoach, une plateforme de coaching premium avec sélection des deux côtés. Je cherche 10 coaches fondateurs pour la beta. Ça t'intéresse ?"". 3) Qualifier les intéressés → envoyer vers /register/coach. 4) Les approuver manuellement via A-004 (pipeline admin). 5) Objectif : 5 coaches approuvés minimum avant le lancement.","F-001, A-004",À faire (toi),CRITIQUE,,,,
+V1.0 — QA & DÉPLOIEMENT,1.0,MARKETING,M-002,Liste d'attente clients (pre-launch),Créer un Typeform simple pour collecter les premiers clients intéressés avant le lancement. Partager sur les 3 plateformes.,"Actions : 1) Créer Typeform gratuit ""Rejoindre la liste d'attente ElitCoach"" avec les questions de qualification (copier les questions de F-002). 2) Partager le lien dans les posts suivants.",F-015,À faire (toi),HAUTE,POST PRÉ-LANCEMENT — Publier 1 semaine avant le lancement,"ElitCoach ouvre en beta fermée dans 7 jours.
+
+On cherche nos 10 premiers clients.
+
+Les critères de sélection sont stricts :
+→ Un objectif business précis et mesurable
+→ Minimum 2h/semaine disponibles
+→ Budget minimum 200€/mois
+→ Motivation réelle (pas de ""je veux voir ce que c'est"")
+
+Pourquoi filtrer les clients ?
+Parce que nos coaches méritent des clients engagés.
+Parce qu'un client non-engagé ruine l'expérience et les stats.
+Parce que la qualité de la plateforme dépend de la qualité des deux côtés.
+
+Si tu corresponds → formulaire en commentaire.
+
+#elitcoach #coaching #buildinpublic","ElitCoach beta dans 7 jours.
+
+On cherche 10 clients.
+Filtre strict : objectif précis + disponibilité + budget + motivation.
+
+Pourquoi filtrer ?
+Parce que nos coaches méritent mieux que des no-shows.
+
+Lien en bio.
+
+#elitcoach #coaching","ElitCoach ouvre en beta dans 7 jours et on cherche nos 10 premiers clients 🎯
+
+Mais attention — on sélectionne les clients aussi soigneusement que les coaches.
+
+On cherche des personnes avec un objectif précis, du temps disponible et la volonté de vraiment progresser.
+
+Pas de touristes.
+
+Le formulaire de candidature est dans les commentaires 👇
+
+#elitcoach #coaching #buildinpublic #entrepreneuriat"
+V1.0 — QA & DÉPLOIEMENT,1.0,MARKETING,M-003,Lancement officiel (jour J),Publier le post de lancement officiel sur les 3 plateformes. Activer le domaine elitcoach.co. Envoyer emails à la liste d'attente.,"Actions J-1 : vérifier que tout fonctionne end-to-end (inscription → réservation → paiement test). Actions Jour J : 1) Activer DNS Cloudflare. 2) Envoyer email à la liste d'attente via Brevo. 3) Publier les posts ci-dessous simultanément sur LinkedIn, X et Facebook. 4) Répondre à chaque commentaire personnellement.","B-029, M-001, M-002",À faire (toi),CRITIQUE,POST LANCEMENT OFFICIEL,"ElitCoach est live. elitcoach.co
+
+De zéro à la production en public, sans capital, sans équipe.
+
+Ce qu'on a construit :
+→ Double sélection : coaches validés manuellement en 5 étapes, clients scorés automatiquement
+→ Réservation + paiement Stripe en pré-autorisation (capturé après session)
+→ Messagerie temps réel avec protection anti-bypass
+→ Suivi d'objectifs mesurables avec check-ins hebdomadaires
+→ Score de crédibilité 0-1000 calculé automatiquement
+→ Dashboard admin avec MRR, pipeline, modération
+
+Stack : NestJS + Next.js 14 + Supabase + Stripe + Socket.io
+
+On cherche les 10 premiers clients beta. Lien en bio.
+
+Merci à tous ceux qui ont suivi cette aventure depuis le début.
+On est loin d'avoir fini.
+
+#buildinpublic #saas #elitcoach #launch #zerotoone","ElitCoach est live. 🚀
+
+elitcoach.co
+
+→ Double sélection coaches + clients
+→ Stripe pré-auth + capture post-session
+→ Chat temps réel anti-bypass
+→ Objectifs mesurables + check-ins
+→ Score crédibilité 0-1000
+
+Built in public. 0 capital. 0 équipe.
+
+On cherche 10 clients beta.
+
+#buildinpublic #saas #launch","C'est live. ElitCoach est en ligne 🎉
+
+elitcoach.co
+
+De l'idée au produit complet, en public, sans financement.
+
+En bref ce qu'on a construit :
+✅ Validation manuelle des coaches (5 étapes)
+✅ Scoring automatique des clients à l'inscription
+✅ Paiement Stripe avec remboursement intelligent
+✅ Messagerie sécurisée en temps réel
+✅ Suivi d'objectifs avec % de progression
+✅ Score de crédibilité coach calculé automatiquement
+
+On cherche les 10 premiers clients beta. Le formulaire de candidature est dans les commentaires 👇
+
+#elitcoach #saas #buildinpublic #entrepreneuriat #coaching"
+V1.0 — QA & DÉPLOIEMENT,1.0,MARKETING,M-004,Premier coach onboardé (milestone),Accompagner le 1er coach approuvé. Documenter les frictions. Publier le retour d'expérience.,"Actions : 1) Appel Zoom 30min avec le coach. 2) L'accompagner sur F-001 → F-005 (inscription + disponibilités). 3) L'approuver via A-004. 4) Documenter : temps total, points de friction, questions posées. 5) Améliorer le produit si nécessaire. 6) Publier les posts ci-dessous.","M-001, A-004",À faire (toi),HAUTE,POST MILESTONE — Premier coach validé,"Premier coach validé sur ElitCoach.
+
+Voici ce que j'ai appris pendant l'onboarding :
+
+3 frictions identifiées :
+→ L'upload vidéo prend du temps (certains ont du mal avec le format)
+→ Les certifications sont un champ libre → beaucoup de variations de saisie à normaliser
+→ Les coaches ont des questions sur la politique de commission 17%
+
+3 choses qui ont bien fonctionné :
+→ Le formulaire 5 étapes est clair (""je savais exactement quoi mettre"")
+→ L'email de confirmation immédiat rassure
+→ La grille de disponibilités est intuitive
+
+Amélioration prévue : page FAQ + vidéo tutoriel d'inscription.
+
+Si tu es coach certifié ICF, EMCC ou équivalent et que tu veux rejoindre la beta → DM.
+
+#buildinpublic #elitcoach #productiteration","Premier coach validé sur ElitCoach ✅
+
+Leçons :
+→ Upload vidéo = plus grande friction
+→ Certifications → champ libre à normaliser
+→ Commission 17% : besoin d'une FAQ claire
+
+Ce qui marche bien :
+→ Formulaire 5 étapes clair
+→ Email confirmation immédiat
+→ Grille dispo intuitive
+
+Itération en cours.
+
+#buildinpublic #elitcoach","Premier coach validé sur ElitCoach 🏆
+
+Retour d'expérience après l'onboarding :
+
+Frictions à corriger :
+→ L'upload vidéo est le point le plus compliqué
+→ Les certifications nécessitent une liste normalisée
+→ La commission de 17% mérite une page FAQ dédiée
+
+Ce qui fonctionne :
+→ Le processus en 5 étapes est clair
+→ La grille de disponibilités est intuitive
+→ Les emails de statut rassurent
+
+On améliore et on continue.
+
+#buildinpublic #elitcoach #entrepreneuriat"
+V1.0 — QA & DÉPLOIEMENT,1.0,MARKETING,M-005,Première session payante — Premier euro (MILESTONE FINAL),"Le moment des premiers revenus. Un client approuvé réserve, paye et complète sa première session.","Actions : 1) Utiliser un client beta (ou test interne) pour réserver une session chez le premier coach. 2) Vérifier le flux complet : réservation → Stripe pre-auth → email confirmé → session Zoom → coach clique ""Compléter"" → capture Stripe → commission débitée. 3) Vérifier : coach a reçu X€ (83%), ElitCoach a X€ de commission (17%). 4) Capturer le screenshot du premier paiement dans Stripe Dashboard. 5) Publier les posts ci-dessous.","M-004, B-014",À faire (toi),CRITIQUE,POST MILESTONE FINAL — Premier euro capturé,"Premier euro.
+
+Aujourd'hui, ElitCoach a capturé sa première commission.
+
+Un client.
+Un coach.
+Une session complétée.
+
+[à compléter avec les vrais montants le jour J]
+
+De l'idée, à la ligne de code, au premier paiement.
+
+Ce que ça m'a appris :
+→ Le produit ne suffit pas — il faut aller chercher les premiers utilisateurs à la main
+→ Le premier euro est surtout une validation, pas une fortune
+→ La vraie question est maintenant : comment en faire 10 ? puis 100 ?
+
+Prochain objectif : 10 sessions/mois.
+Ensuite 50.
+Ensuite 100.
+
+Merci à tous ceux qui suivent depuis le début.
+On est loin d'avoir fini.
+
+#buildinpublic #saas #firstrevenue #elitcoach #zerotoone","Premier euro capturé sur ElitCoach. 💰
+
+1 client. 1 coach. 1 session. 1 commission.
+
+De l'idée au premier revenu, en public.
+
+Objectif suivant : 10 sessions/mois.
+
+Merci à ceux qui suivent depuis le début.
+On est loin d'avoir fini.
+
+#buildinpublic #firstrevenue #saas #elitcoach","Le premier euro vient de tomber sur ElitCoach 🎯
+
+Une session complétée. Un coach payé. Une commission encaissée.
+
+C'est un moment bizarre — le chiffre est petit, mais la signification est immense.
+Ça valide que le produit fonctionne de bout en bout.
+Que quelqu'un a voulu payer pour utiliser quelque chose qu'on a construit de zéro.
+
+Prochain objectif : 10 sessions par mois.
+
+On documente tout. La suite arrive.
+
+#buildinpublic #elitcoach #firstrevenue #entrepreneuriat"

@@ -1,0 +1,117 @@
+// ElitCoach — Prisma Schema
+// Couvre S-005 (connexion) + B-001 (modèles User/Coach/Client)
+generator client {
+  provider = "prisma-client-js"
+  output   = "../backend/node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ENUMS ───────────────────────────────────────────────
+
+enum Role {
+  COACH
+  CLIENT
+  ADMIN
+}
+
+enum CoachStatus {
+  PENDING
+  SCREENING
+  INTERVIEW
+  TEST
+  APPROVED
+  REJECTED
+}
+
+enum ClientStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// ─── MODELS ──────────────────────────────────────────────
+
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  passwordHash    String
+  role            Role      @default(CLIENT)
+  emailVerified   Boolean   @default(false)
+  suspended       Boolean   @default(false)
+  suspendedUntil  DateTime?
+  status          String    @default("ACTIVE")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  coachProfile        CoachProfile?
+  clientProfile       ClientProfile?
+  emailVerifications  EmailVerification[]
+  refreshTokens       RefreshToken[]
+}
+
+model CoachProfile {
+  id              String      @id @default(uuid())
+  userId          String      @unique
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  firstName       String
+  lastName        String
+  bio             String?
+  specialties     String[]
+  certifications  String[]
+  yearsExperience Int?
+  hourlyRate      Int?
+  videoUrl        String?
+  slug            String?     @unique
+  photoUrl        String?
+
+  status          CoachStatus @default(PENDING)
+  score           Int         @default(0)
+  isVerified      Boolean     @default(false)
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model ClientProfile {
+  id                    String        @id @default(uuid())
+  userId                String        @unique
+  user                  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  firstName             String
+  lastName              String
+  objective             String?
+  budget                Int?
+  qualifyScore          Int?
+  hoursPerWeek          Int?
+  hadCoachBefore        Boolean?
+  previousCoachResult   String?
+  whyNow                String?
+
+  status                ClientStatus  @default(PENDING)
+
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+}
+
+model EmailVerification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
