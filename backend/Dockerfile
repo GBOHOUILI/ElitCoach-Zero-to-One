@@ -7,13 +7,15 @@ RUN apk add --no-cache openssl libc6-compat
 
 COPY . .
 
+# FULL install (prisma CLI présent ici)
 RUN pnpm install
 
 WORKDIR /app/backend
 
-# Prisma generate dans backend ONLY
+# Prisma OK ici
 RUN pnpm exec prisma generate
 
+# Build Nest
 RUN pnpm run build
 
 
@@ -26,18 +28,18 @@ RUN npm install -g pnpm
 
 COPY . .
 
+# prod install ONLY (pas de prisma CLI ici, normal)
 RUN pnpm install --prod
 
 WORKDIR /app/backend
 
-# ❌ NO copy of root prisma
-# ❌ NO node_modules/.prisma copy
+# ❌ IMPORTANT: NO prisma generate ici
 
-# ✔ rebuild Prisma runtime-safe (simple & stable)
-RUN pnpm exec prisma generate
-
-# ✔ correct build copy
+# copy build
 COPY --from=builder /app/backend/dist ./dist
+
+# Prisma client déjà généré dans builder → OK
+COPY --from=builder /app/backend/node_modules/.prisma ./node_modules/.prisma
 
 ENV NODE_ENV=production
 ENV PORT=3001
