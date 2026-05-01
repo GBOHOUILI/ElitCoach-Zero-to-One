@@ -38,7 +38,6 @@ RUN corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY shared ./shared
 COPY backend/package.json ./backend/package.json
-COPY backend/dist ./backend/dist
 COPY backend/prisma ./backend/prisma
 COPY prisma ./prisma
 
