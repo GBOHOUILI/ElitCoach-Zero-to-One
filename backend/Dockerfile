@@ -7,17 +7,20 @@ WORKDIR /app
 
 RUN npm install -g pnpm
 
+# dépendances système nécessaires pour Prisma
+RUN apk add --no-cache openssl libc6-compat
+
 COPY . .
 
-# install ALL deps (important pour prisma generate)
+# install deps (monorepo)
 RUN pnpm install
 
 WORKDIR /app/backend
 
-# generate prisma client
+# Prisma generate
 RUN pnpm exec prisma generate
 
-# build nest
+# build NestJS
 RUN pnpm run build
 
 
@@ -28,15 +31,22 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 
+# IMPORTANT: OpenSSL pour Prisma
+RUN apk add --no-cache openssl libc6-compat
+
 RUN npm install -g pnpm
 
+# copier configs PNPM (monorepo)
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# install prod deps only
-RUN pnpm install --prod
+# installer seulement les deps backend
+RUN pnpm install --prod --filter backend...
 
-# copy backend build
+# copier build backend
 COPY --from=builder /app/backend/dist ./backend/dist
+
+# (optionnel mais utile si Prisma runtime manque)
+COPY --from=builder /app/node_modules ./node_modules
 
 WORKDIR /app/backend
 
