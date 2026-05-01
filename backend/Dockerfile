@@ -1,41 +1,53 @@
 FROM node:20-alpine AS builder
+
 WORKDIR /app
 
-# Copy workspace files
-COPY package.json pnpm-workspace.yaml ./
-COPY shared ./shared
-COPY backend/package.json ./backend/
-
-# Install pnpm
 RUN npm install -g pnpm
+RUN corepack enable
 
-# Install deps
+# Workspace files
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+# Full repo
 COPY backend ./backend
-COPY prisma ./backend/prisma
+COPY shared ./shared
+COPY prisma ./prisma
 
-RUN pnpm install --filter elitcoach-backend --frozen-lockfile
+# Install all deps
+RUN pnpm install
+
+# Move into backend
+WORKDIR /app/backend
 
 # Build
-WORKDIR /app/backend
 RUN pnpm run build
 
-# Generate Prisma client
+# Prisma generate (IMPORTANT après install + dans backend)
 RUN pnpm exec prisma generate
 
+
+# -------------------------
 FROM node:20-alpine AS runner
+
 WORKDIR /app
 
 RUN npm install -g pnpm
+RUN corepack enable
 
-COPY --from=builder /app/package.json /app/pnpm-workspace.yaml ./
-COPY --from=builder /app/shared ./shared
-COPY --from=builder /app/backend/package.json ./backend/
-COPY --from=builder /app/backend/dist ./backend/dist
-COPY --from=builder /app/backend/prisma ./backend/prisma
-COPY --from=builder /app/node_modules ./node_modules
+# Copy only needed output
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY shared ./shared
+COPY backend/package.json ./backend/package.json
+COPY backend/dist ./backend/dist
+COPY backend/prisma ./backend/prisma
+COPY prisma ./prisma
+
+# Install only production deps (safe mode)
+RUN pnpm install --prod
 
 WORKDIR /app/backend
+
 ENV NODE_ENV=production
 EXPOSE 3001
 
-CMD ["node", "dist/main"]
+CMD ["node", "dist/main.js"]
