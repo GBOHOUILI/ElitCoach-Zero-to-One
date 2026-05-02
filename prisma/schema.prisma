@@ -2,12 +2,13 @@
 // Couvre S-005 (connexion) + B-001 (modèles User/Coach/Client)
 generator client {
   provider = "prisma-client-js"
-  output   = "../backend/node_modules/.prisma/client"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL")
 }
 
 // ─── ENUMS ───────────────────────────────────────────────

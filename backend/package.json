@@ -11,10 +11,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node ../prisma/seed.ts"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node ../prisma/seed.ts",
+    "schema": "../prisma/schema.prisma"
   },
   "dependencies": {
     "@nestjs/bull": "^10.0.0",
