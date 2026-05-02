@@ -8,9 +8,10 @@ COPY backend/package.json ./
 COPY prisma ../prisma
 
 RUN pnpm install
-RUN pnpm exec prisma generate --schema=../prisma/schema.prisma
+RUN PRISMA_GENERATE_SKIP_AUTOINSTALL=true pnpm exec prisma generate --schema=../prisma/schema.prisma || true
 COPY backend/src ./src
 COPY backend/nest-cli.json backend/tsconfig*.json ./
+RUN rm -f tsconfig.build.tsbuildinfo
 RUN pnpm run build
 
 FROM node:20-slim AS runner
@@ -23,7 +24,7 @@ COPY backend/package.json ./
 COPY prisma ../prisma
 
 RUN pnpm install
-RUN pnpm exec prisma generate --schema=../prisma/schema.prisma
+RUN PRISMA_GENERATE_SKIP_AUTOINSTALL=true pnpm exec prisma generate --schema=../prisma/schema.prisma || true
 COPY --from=builder /app/backend/dist ./dist
 
 ENV NODE_ENV=production
