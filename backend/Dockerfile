@@ -10,7 +10,7 @@ RUN pnpm --filter backend run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 RUN apk add --no-cache openssl libc6-compat
-RUN npm install -g pnpm prisma
+RUN npm install -g pnpm prisma@5.22.0
 COPY . .
 RUN pnpm install --frozen-lockfile
 RUN prisma generate --schema=backend/../prisma/schema.prisma
