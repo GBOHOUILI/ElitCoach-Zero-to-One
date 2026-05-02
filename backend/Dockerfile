@@ -3,18 +3,18 @@ WORKDIR /app
 RUN apk add --no-cache openssl libc6-compat
 RUN npm install -g pnpm
 COPY . .
-RUN pnpm install
-RUN pnpm approve-builds --all || true
-RUN pnpm --filter backend exec prisma generate --schema=../prisma/schema.prisma
+RUN echo "enable-pre-post-scripts=true" >> .npmrc
+RUN pnpm install --config.unsafe-perm=true
+RUN cd backend && npx prisma generate --schema=../prisma/schema.prisma
 RUN pnpm --filter backend run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 RUN apk add --no-cache openssl libc6-compat
 RUN npm install -g pnpm
 COPY . .
-RUN pnpm install --frozen-lockfile
-RUN pnpm approve-builds --all || true
-RUN pnpm --filter backend exec prisma generate --schema=../prisma/schema.prisma
+RUN echo "enable-pre-post-scripts=true" >> .npmrc
+RUN pnpm install --frozen-lockfile --config.unsafe-perm=true
+RUN cd backend && npx prisma generate --schema=../prisma/schema.prisma
 COPY --from=builder /app/backend/dist /app/backend/dist
 WORKDIR /app/backend
 ENV NODE_ENV=production
