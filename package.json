@@ -1,6 +1,18 @@
 {
   "name": "elitcoach-monorepo",
   "private": true,
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "@prisma/client",
+      "@prisma/engines",
+      "prisma",
+      "msgpackr-extract",
+      "bson",
+      "@scarf/scarf",
+      "unrs-resolver"
+    ]
+  },
   "workspaces": [
     "backend",
     "frontend",
@@ -11,8 +23,8 @@
     "dev:backend": "pnpm --filter backend run start:dev",
     "dev:frontend": "pnpm --filter frontend run dev",
     "build": "pnpm --filter backend run build && pnpm --filter frontend run build",
-    "prisma:generate": "pnpm --filter backend exec prisma generate --schema=../prisma/schema.prisma",
-    "prisma:migrate": "pnpm --filter backend exec prisma migrate dev --schema=../prisma/schema.prisma"
+    "prisma:generate": "pnpm --filter backend exec prisma generate --schema=prisma/schema.prisma",
+    "prisma:migrate": "pnpm --filter backend exec prisma migrate dev --schema=prisma/schema.prisma"
   },
   "devDependencies": {
     "concurrently": "^8.2.0"
