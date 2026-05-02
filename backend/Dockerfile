@@ -1,18 +1,19 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 RUN apk add --no-cache openssl libc6-compat
-RUN npm install -g pnpm
+RUN npm install -g pnpm prisma
 COPY . .
 RUN pnpm install
-RUN cd backend && npx prisma generate --schema=../prisma/schema.prisma
+RUN prisma generate --schema=backend/../prisma/schema.prisma
 RUN pnpm --filter backend run build
+
 FROM node:20-alpine AS runner
 WORKDIR /app
 RUN apk add --no-cache openssl libc6-compat
-RUN npm install -g pnpm
+RUN npm install -g pnpm prisma
 COPY . .
 RUN pnpm install --frozen-lockfile
-RUN cd backend && npx prisma generate --schema=../prisma/schema.prisma
+RUN prisma generate --schema=backend/../prisma/schema.prisma
 COPY --from=builder /app/backend/dist /app/backend/dist
 WORKDIR /app/backend
 ENV NODE_ENV=production
