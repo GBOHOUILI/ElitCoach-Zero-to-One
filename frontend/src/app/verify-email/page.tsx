@@ -34,12 +34,12 @@ function VerifyContent() {
           {status === 'loading' && (
             <>
               <div style={{
-                width: 48, height: 48, border: '2px solid var(--dark-border)',
+                width: 48, height: 48, border: '2px solid var(--border-2)',
                 borderTop: '2px solid var(--gold)', borderRadius: '50%',
                 animation: 'spin 0.8s linear infinite', margin: '0 auto 1.5rem',
               }} />
               <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', letterSpacing: '0.05em' }}>
+              <p style={{ color: 'var(--text-2)', fontSize: '0.85rem', letterSpacing: '0.05em' }}>
                 Vérification en cours...
               </p>
             </>
@@ -56,7 +56,7 @@ function VerifyContent() {
               <h2 className="font-display" style={{ fontSize: '1.6rem', fontWeight: 300, marginBottom: '0.75rem' }}>
                 Email vérifié
               </h2>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '2rem' }}>
+              <p style={{ color: 'var(--text-2)', fontSize: '0.85rem', marginBottom: '2rem' }}>
                 Votre compte est activé. Vous pouvez vous connecter.
               </p>
               <Link href="/login" className="btn-gold" style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}>
@@ -76,7 +76,7 @@ function VerifyContent() {
               <h2 className="font-display" style={{ fontSize: '1.6rem', fontWeight: 300, marginBottom: '0.75rem' }}>
                 Lien invalide
               </h2>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '2rem' }}>
+              <p style={{ color: 'var(--text-2)', fontSize: '0.85rem', marginBottom: '2rem' }}>
                 {message}
               </p>
               <Link href="/login" style={{

@@ -7,7 +7,7 @@ export default function PendingPage() {
           Candidature reçue
         </h1>
         <div style={{ width: 48, height: 1, background: 'var(--gold)', margin: '0 auto 1.5rem' }} />
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.9 }}>
+        <p style={{ color: 'var(--text-2)', fontSize: '0.9rem', lineHeight: 1.9 }}>
           Votre candidature est en cours d'analyse.<br />
           Vous recevrez une réponse sous 48h.
         </p>

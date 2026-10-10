@@ -100,7 +100,7 @@ export default function RegisterCoachPage() {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <a href="/" style={{ textDecoration: 'none' }}>
-            <h1 className="font-display" style={{ fontSize: '2.2rem', fontWeight: 300, color: '#FAFAF8' }}>
+            <h1 className="font-display" style={{ fontSize: '2.2rem', fontWeight: 300, color: 'var(--text)' }}>
               ElitCoach
             </h1>
           </a>
@@ -115,12 +115,12 @@ export default function RegisterCoachPage() {
             {['Identité', 'Expertise', 'Tarifs', 'Vidéo', 'Références'].map((label, i) => (
               <span key={i} style={{
                 fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase',
-                color: step > i + 1 ? 'var(--gold)' : step === i + 1 ? '#FAFAF8' : 'var(--text-muted)',
+                color: step > i + 1 ? 'var(--gold)' : step === i + 1 ? 'var(--text)' : 'var(--text-2)',
                 transition: 'color 0.3s',
               }}>{label}</span>
             ))}
           </div>
-          <div style={{ height: 1, background: 'var(--dark-border)', position: 'relative' }}>
+          <div style={{ height: 1, background: 'var(--border-2)', position: 'relative' }}>
             <div style={{
               position: 'absolute', left: 0, top: 0, height: '100%',
               width: `${progress}%`, background: 'var(--gold)',
@@ -169,9 +169,9 @@ export default function RegisterCoachPage() {
                       )}
                       style={{
                         padding: '0.4rem 0.9rem', fontSize: '0.75rem', letterSpacing: '0.05em',
-                        border: `1px solid ${form.specialties.includes(s) ? 'var(--gold)' : 'var(--dark-border)'}`,
+                        border: `1px solid ${form.specialties.includes(s) ? 'var(--gold)' : 'var(--border-2)'}`,
                         background: form.specialties.includes(s) ? 'rgba(201,168,76,0.1)' : 'transparent',
-                        color: form.specialties.includes(s) ? 'var(--gold)' : 'var(--text-muted)',
+                        color: form.specialties.includes(s) ? 'var(--gold)' : 'var(--text-2)',
                         cursor: 'pointer', transition: 'all 0.2s',
                       }}>{s}</button>
                   ))}
@@ -185,7 +185,7 @@ export default function RegisterCoachPage() {
                     onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addCert())}
                     placeholder="Ex: ICF ACC — appuyez Entrée" />
                   <button type="button" onClick={addCert} style={{
-                    padding: '0 1rem', background: 'var(--dark-border)', border: 'none',
+                    padding: '0 1rem', background: 'var(--border-2)', border: 'none',
                     color: 'var(--text)', cursor: 'pointer', whiteSpace: 'nowrap', fontSize: '0.8rem',
                   }}>+</button>
                 </div>
@@ -220,13 +220,13 @@ export default function RegisterCoachPage() {
                 </div>
               </div>
               <div>
-                <Label>Bio <span style={{ color: 'var(--text-muted)', fontWeight: 300 }}>(min 200 caractères)</span></Label>
+                <Label>Bio <span style={{ color: 'var(--text-2)', fontWeight: 300 }}>(min 200 caractères)</span></Label>
                 <textarea className="input-dark" rows={6} value={form.bio}
                   onChange={e => set('bio', e.target.value)}
                   placeholder="Décrivez votre parcours, votre approche, vos résultats clients..."
                   style={{ resize: 'vertical', marginTop: '0.4rem' }} />
                 <div style={{ textAlign: 'right', fontSize: '0.7rem', marginTop: '0.3rem',
-                  color: form.bio.length >= 200 ? 'var(--gold)' : 'var(--text-muted)' }}>
+                  color: form.bio.length >= 200 ? 'var(--gold)' : 'var(--text-2)' }}>
                   {form.bio.length}/200
                 </div>
               </div>
@@ -237,7 +237,7 @@ export default function RegisterCoachPage() {
           {step === 4 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <SectionTitle>Vidéo de présentation</SectionTitle>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', lineHeight: 1.6 }}>
+              <p style={{ color: 'var(--text-2)', fontSize: '0.8rem', lineHeight: 1.6 }}>
                 Partagez un lien YouTube ou Vimeo (optionnel). Une vidéo de présentation augmente vos chances d'être sélectionné.
               </p>
               <Field label="Lien vidéo (optionnel)" value={form.videoUrl}
@@ -258,9 +258,9 @@ export default function RegisterCoachPage() {
           {step === 5 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <SectionTitle>Références professionnelles</SectionTitle>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>3 personnes pouvant témoigner de votre travail.</p>
+              <p style={{ color: 'var(--text-2)', fontSize: '0.8rem' }}>3 personnes pouvant témoigner de votre travail.</p>
               {[1, 2, 3].map(n => (
-                <div key={n} style={{ padding: '1.25rem', border: '1px solid var(--dark-border)', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div key={n} style={{ padding: '1.25rem', border: '1px solid var(--border-2)', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   <span style={{ fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--gold)' }}>Référence {n}</span>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                     <Field label="Nom" value={(form as any)[`ref${n}Name`]} onChange={v => set(`ref${n}Name`, v)} placeholder="Marie Dupont" />
@@ -277,7 +277,7 @@ export default function RegisterCoachPage() {
             {step > 1 && (
               <button type="button" onClick={() => { setError(''); setStep(s => s - 1); }} style={{
                 flex: 1, padding: '0.85rem', background: 'transparent',
-                border: '1px solid var(--dark-border)', color: 'var(--text-muted)',
+                border: '1px solid var(--border-2)', color: 'var(--text-2)',
                 cursor: 'pointer', fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase',
               }}>
                 Précédent
@@ -296,7 +296,7 @@ export default function RegisterCoachPage() {
 
         </div>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.75rem', color: 'var(--text-2)' }}>
           Déjà un compte ?{' '}
           <a href="/login" style={{ color: 'var(--gold)', textDecoration: 'none' }}>Se connecter</a>
         </p>
@@ -308,7 +308,7 @@ export default function RegisterCoachPage() {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+    <h2 style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-2)', marginBottom: '0.5rem' }}>
       {children}
     </h2>
   );
@@ -316,7 +316,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block' }}>
+    <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-2)', display: 'block' }}>
       {children}
     </label>
   );

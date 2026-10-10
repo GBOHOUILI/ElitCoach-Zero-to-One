@@ -76,20 +76,20 @@ export default function MessagesPage() {
   const sidebarRole = role === 'COACH' ? 'coach' : role === 'ADMIN' ? 'admin' : 'client';
 
   return (
-    <div style={{ display: 'flex', background: '#0D0D0D', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', background: 'var(--bg)', minHeight: '100vh' }}>
       <Sidebar role={sidebarRole} />
       <div style={{ marginLeft: 220, flex: 1, display: 'flex', height: '100vh' }}>
 
         {/* Liste conversations */}
-        <div style={{ width: 280, borderRight: '1px solid #1a1a1a', display: 'flex', flexDirection: 'column', background: '#141414' }}>
+        <div style={{ width: 280, borderRight: '1px solid #1a1a1a', display: 'flex', flexDirection: 'column', background: 'var(--surface)' }}>
           <div style={{ padding: '1.25rem', borderBottom: '1px solid #1a1a1a' }}>
-            <h1 style={{ fontSize: '0.85rem', fontWeight: 400, color: '#FAFAF8', letterSpacing: '0.05em' }}>Messages</h1>
+            <h1 style={{ fontSize: '0.85rem', fontWeight: 400, color: 'var(--text)', letterSpacing: '0.05em' }}>Messages</h1>
           </div>
           <div style={{ flex: 1, overflowY: 'auto' }}>
             {loading ? (
-              <p style={{ color: '#555', fontSize: '0.8rem', padding: '1.5rem' }}>Chargement...</p>
+              <p style={{ color: 'var(--text-2)', fontSize: '0.8rem', padding: '1.5rem' }}>Chargement...</p>
             ) : conversations.length === 0 ? (
-              <p style={{ color: '#444', fontSize: '0.8rem', padding: '1.5rem', lineHeight: 1.6 }}>
+              <p style={{ color: 'var(--text-2)', fontSize: '0.8rem', padding: '1.5rem', lineHeight: 1.6 }}>
                 Aucune conversation.<br />
                 {role === 'CLIENT' && 'Réservez une session pour commencer à échanger avec un coach.'}
               </p>
@@ -105,13 +105,13 @@ export default function MessagesPage() {
                     border: 'none', borderBottom: '1px solid #111', cursor: 'pointer',
                   }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.35rem' }}>
-                    <span style={{ color: isActive ? '#C9A84C' : '#FAFAF8', fontSize: '0.85rem' }}>
+                    <span style={{ color: isActive ? 'var(--gold)' : 'var(--text)', fontSize: '0.85rem' }}>
                       {other?.firstName} {other?.lastName}
                     </span>
-                    {lastMsg && <span style={{ color: '#333', fontSize: '0.65rem' }}>{new Date(lastMsg.createdAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>}
+                    {lastMsg && <span style={{ color: 'var(--text-3)', fontSize: '0.65rem' }}>{new Date(lastMsg.createdAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>}
                   </div>
                   {lastMsg && (
-                    <span style={{ color: '#444', fontSize: '0.75rem', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <span style={{ color: 'var(--text-2)', fontSize: '0.75rem', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {lastMsg.content?.substring(0, 45)}...
                     </span>
                   )}
@@ -124,19 +124,19 @@ export default function MessagesPage() {
         {/* Zone chat */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           {!activeConv ? (
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#333', fontSize: '0.875rem' }}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-3)', fontSize: '0.875rem' }}>
               Sélectionnez une conversation
             </div>
           ) : (
             <>
               {/* Header */}
-              <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #1a1a1a', display: 'flex', alignItems: 'center', gap: '0.75rem', background: '#141414' }}>
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(201,168,76,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#C9A84C', fontSize: '0.9rem' }}>
+              <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #1a1a1a', display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'var(--surface)' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(201,168,76,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--gold)', fontSize: '0.9rem' }}>
                   {activeConv.otherPerson?.firstName?.[0]}
                 </div>
                 <div>
-                  <div style={{ color: '#FAFAF8', fontSize: '0.875rem' }}>{activeConv.otherPerson?.firstName} {activeConv.otherPerson?.lastName}</div>
-                  <div style={{ color: '#555', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{activeConv.otherPerson?.role}</div>
+                  <div style={{ color: 'var(--text)', fontSize: '0.875rem' }}>{activeConv.otherPerson?.firstName} {activeConv.otherPerson?.lastName}</div>
+                  <div style={{ color: 'var(--text-2)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{activeConv.otherPerson?.role}</div>
                 </div>
               </div>
 
@@ -148,12 +148,12 @@ export default function MessagesPage() {
                     <div key={i} style={{ display: 'flex', justifyContent: isMe ? 'flex-end' : 'flex-start' }}>
                       <div style={{
                         maxWidth: '65%', padding: '0.65rem 1rem',
-                        background: isMe ? 'rgba(201,168,76,0.15)' : '#1a1a1a',
-                        border: `1px solid ${isMe ? 'rgba(201,168,76,0.2)' : '#242424'}`,
+                        background: isMe ? 'rgba(201,168,76,0.15)' : 'var(--border)',
+                        border: `1px solid ${isMe ? 'rgba(201,168,76,0.2)' : 'var(--border-2)'}`,
                         borderRadius: isMe ? '12px 12px 0 12px' : '12px 12px 12px 0',
                       }}>
-                        <p style={{ color: '#FAFAF8', fontSize: '0.875rem', margin: 0, lineHeight: 1.5 }}>{msg.content}</p>
-                        <span style={{ color: '#444', fontSize: '0.65rem', display: 'block', marginTop: '0.35rem', textAlign: isMe ? 'right' : 'left' }}>
+                        <p style={{ color: 'var(--text)', fontSize: '0.875rem', margin: 0, lineHeight: 1.5 }}>{msg.content}</p>
+                        <span style={{ color: 'var(--text-2)', fontSize: '0.65rem', display: 'block', marginTop: '0.35rem', textAlign: isMe ? 'right' : 'left' }}>
                           {new Date(msg.createdAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                           {isMe && msg.isRead && <span style={{ marginLeft: '0.35rem' }}>✓✓</span>}
                         </span>
@@ -180,15 +180,15 @@ export default function MessagesPage() {
                   placeholder="Votre message... (Shift+Entrée pour saut de ligne)"
                   rows={2}
                   style={{
-                    flex: 1, background: '#141414', border: '1px solid #242424', color: '#FAFAF8',
+                    flex: 1, background: 'var(--surface)', border: '1px solid #242424', color: 'var(--text)',
                     padding: '0.65rem 1rem', fontSize: '0.875rem', resize: 'none', outline: 'none',
                     fontFamily: 'DM Sans, sans-serif',
                   }}
                 />
                 <button type="button" onClick={sendMessage} disabled={sending || !input.trim()}
                   style={{
-                    padding: '0 1.25rem', background: input.trim() ? '#C9A84C' : '#1a1a1a',
-                    border: 'none', color: input.trim() ? '#0D0D0D' : '#333',
+                    padding: '0 1.25rem', background: input.trim() ? 'var(--gold)' : 'var(--border)',
+                    border: 'none', color: input.trim() ? 'var(--bg)' : '#333',
                     cursor: input.trim() ? 'pointer' : 'not-allowed', fontSize: '0.8rem',
                     transition: 'all 0.2s',
                   }}>

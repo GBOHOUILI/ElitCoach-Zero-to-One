@@ -15,26 +15,26 @@ export default function TermsPage() {
   ];
 
   return (
-    <main style={{ background: 'var(--dark)', minHeight: '100vh', padding: '4rem 1rem' }}>
+    <main style={{ background: 'var(--bg)', minHeight: '100vh', padding: '4rem 1rem' }}>
       <div style={{ maxWidth: 760, margin: '0 auto' }}>
         <a href="/" style={{ textDecoration: 'none' }}>
           <h1 className="font-display" style={{ fontSize: '2rem', fontWeight: 300, textAlign: 'center', marginBottom: '0.5rem' }}>ElitCoach</h1>
         </a>
         <div style={{ width: 40, height: 1, background: 'var(--gold)', margin: '0 auto 3rem' }} />
         <h2 className="font-display" style={{ fontSize: '2.2rem', fontWeight: 300, marginBottom: '0.5rem' }}>Conditions Générales d'Utilisation</h2>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: '3rem' }}>Dernière mise à jour : {new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+        <p style={{ color: 'var(--text-2)', fontSize: '0.8rem', marginBottom: '3rem' }}>Dernière mise à jour : {new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
           {sections.map((s, i) => (
             <div key={i}>
               <h3 style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--gold)', marginBottom: '0.75rem' }}>{s.title}</h3>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.8, whiteSpace: 'pre-line' }}>{s.content}</div>
+              <div style={{ color: 'var(--text-2)', fontSize: '0.875rem', lineHeight: 1.8, whiteSpace: 'pre-line' }}>{s.content}</div>
             </div>
           ))}
         </div>
-        <div style={{ marginTop: '4rem', paddingTop: '2rem', borderTop: '1px solid var(--dark-border)', textAlign: 'center' }}>
-          <a href="/legal/privacy" style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textDecoration: 'none' }}>Confidentialité</a>
-          <span style={{ color: 'var(--dark-border)', margin: '0 1rem' }}>|</span>
-          <a href="/legal/cookies" style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textDecoration: 'none' }}>Cookies</a>
+        <div style={{ marginTop: '4rem', paddingTop: '2rem', borderTop: '1px solid var(--border-2)', textAlign: 'center' }}>
+          <a href="/legal/privacy" style={{ color: 'var(--text-2)', fontSize: '0.75rem', textDecoration: 'none' }}>Confidentialité</a>
+          <span style={{ color: 'var(--border-2)', margin: '0 1rem' }}>|</span>
+          <a href="/legal/cookies" style={{ color: 'var(--text-2)', fontSize: '0.75rem', textDecoration: 'none' }}>Cookies</a>
         </div>
       </div>
     </main>
