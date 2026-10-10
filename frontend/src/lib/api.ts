@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://elitcoach-api.onrender.com/api',
   withCredentials: true,
 });
 
@@ -30,7 +30,7 @@ api.interceptors.response.use(
           ?.split('=')[1];
         if (refreshToken) {
           const { data } = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'}/auth/refresh`,
+            `${process.env.NEXT_PUBLIC_API_URL || 'https://elitcoach-api.onrender.com/api'}/auth/refresh`,
             { refreshToken },
           );
           localStorage.setItem('accessToken', data.accessToken);
