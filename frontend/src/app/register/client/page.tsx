@@ -73,7 +73,7 @@ export default function RegisterClientPage() {
 
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <a href="/" style={{ textDecoration: 'none' }}>
-            <h1 className="font-display" style={{ fontSize: '2.2rem', fontWeight: 300, color: '#FAFAF8' }}>ElitCoach</h1>
+            <h1 className="font-display" style={{ fontSize: '2.2rem', fontWeight: 300, color: 'var(--text)' }}>ElitCoach</h1>
           </a>
           <p style={{ color: 'var(--gold)', fontSize: '0.65rem', letterSpacing: '0.25em', textTransform: 'uppercase', marginTop: '0.3rem' }}>
             Candidature Client
@@ -95,7 +95,7 @@ export default function RegisterClientPage() {
           {[1, 2].map(n => (
             <div key={n} style={{
               flex: 1, height: 2,
-              background: step >= n ? 'var(--gold)' : 'var(--dark-border)',
+              background: step >= n ? 'var(--gold)' : 'var(--border-2)',
               transition: 'background 0.3s',
             }} />
           ))}
@@ -114,7 +114,7 @@ export default function RegisterClientPage() {
           {/* ÉTAPE 1 */}
           {step === 1 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <h2 style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+              <h2 style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-2)', marginBottom: '0.5rem' }}>
                 Informations personnelles
               </h2>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
@@ -135,26 +135,26 @@ export default function RegisterClientPage() {
           {step === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <div style={{ padding: '0.75rem 1rem', background: 'rgba(201,168,76,0.05)', borderLeft: '2px solid var(--gold)' }}>
-                <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                <p style={{ fontSize: '0.78rem', color: 'var(--text-2)', lineHeight: 1.6 }}>
                   Ces questions permettent de vérifier que le coaching est la bonne étape pour vous.
                 </p>
               </div>
 
               <div>
-                <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: '0.4rem' }}>
+                <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-2)', display: 'block', marginBottom: '0.4rem' }}>
                   Quel résultat précis visez-vous en 3 mois ?
                 </label>
                 <textarea className="input-dark" rows={3} value={form.objective}
                   onChange={e => set('objective', e.target.value)}
                   placeholder="Ex: Signer 3 nouveaux clients et atteindre 5000€ de CA mensuel"
                   style={{ resize: 'none', marginTop: '0.4rem' }} />
-                <div style={{ textAlign: 'right', fontSize: '0.7rem', color: form.objective.length >= 50 ? 'var(--gold)' : 'var(--text-muted)' }}>
+                <div style={{ textAlign: 'right', fontSize: '0.7rem', color: form.objective.length >= 50 ? 'var(--gold)' : 'var(--text-2)' }}>
                   {form.objective.length}/50 min
                 </div>
               </div>
 
               <div>
-                <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>
+                <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-2)', display: 'block', marginBottom: '0.5rem' }}>
                   Heures disponibles par semaine
                 </label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
@@ -163,9 +163,9 @@ export default function RegisterClientPage() {
                       onClick={() => set('hoursPerWeek', o.value)}
                       style={{
                         padding: '0.6rem', fontSize: '0.78rem',
-                        border: `1px solid ${form.hoursPerWeek === o.value ? 'var(--gold)' : 'var(--dark-border)'}`,
+                        border: `1px solid ${form.hoursPerWeek === o.value ? 'var(--gold)' : 'var(--border-2)'}`,
                         background: form.hoursPerWeek === o.value ? 'rgba(201,168,76,0.1)' : 'transparent',
-                        color: form.hoursPerWeek === o.value ? 'var(--gold)' : 'var(--text-muted)',
+                        color: form.hoursPerWeek === o.value ? 'var(--gold)' : 'var(--text-2)',
                         cursor: 'pointer', transition: 'all 0.2s',
                       }}>{o.label}</button>
                   ))}
@@ -173,7 +173,7 @@ export default function RegisterClientPage() {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>
+                <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-2)', display: 'block', marginBottom: '0.5rem' }}>
                   Budget mensuel
                 </label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
@@ -182,9 +182,9 @@ export default function RegisterClientPage() {
                       onClick={() => set('budget', o.value)}
                       style={{
                         padding: '0.6rem', fontSize: '0.78rem',
-                        border: `1px solid ${form.budget === o.value ? 'var(--gold)' : 'var(--dark-border)'}`,
+                        border: `1px solid ${form.budget === o.value ? 'var(--gold)' : 'var(--border-2)'}`,
                         background: form.budget === o.value ? 'rgba(201,168,76,0.1)' : 'transparent',
-                        color: form.budget === o.value ? 'var(--gold)' : 'var(--text-muted)',
+                        color: form.budget === o.value ? 'var(--gold)' : 'var(--text-2)',
                         cursor: 'pointer', transition: 'all 0.2s',
                       }}>{o.label}</button>
                   ))}
@@ -192,7 +192,7 @@ export default function RegisterClientPage() {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>
+                <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-2)', display: 'block', marginBottom: '0.5rem' }}>
                   Avez-vous déjà travaillé avec un coach ?
                 </label>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -201,9 +201,9 @@ export default function RegisterClientPage() {
                       onClick={() => set('hadCoachBefore', v)}
                       style={{
                         flex: 1, padding: '0.6rem', fontSize: '0.78rem',
-                        border: `1px solid ${form.hadCoachBefore === v ? 'var(--gold)' : 'var(--dark-border)'}`,
+                        border: `1px solid ${form.hadCoachBefore === v ? 'var(--gold)' : 'var(--border-2)'}`,
                         background: form.hadCoachBefore === v ? 'rgba(201,168,76,0.1)' : 'transparent',
-                        color: form.hadCoachBefore === v ? 'var(--gold)' : 'var(--text-muted)',
+                        color: form.hadCoachBefore === v ? 'var(--gold)' : 'var(--text-2)',
                         cursor: 'pointer', transition: 'all 0.2s',
                       }}>{v ? 'Oui' : 'Non'}</button>
                   ))}
@@ -212,7 +212,7 @@ export default function RegisterClientPage() {
 
               {form.hadCoachBefore && (
                 <div>
-                  <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: '0.4rem' }}>
+                  <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-2)', display: 'block', marginBottom: '0.4rem' }}>
                     Quel résultat ? Pourquoi avez-vous arrêté ?
                   </label>
                   <textarea className="input-dark" rows={2} value={form.previousCoachResult}
@@ -223,14 +223,14 @@ export default function RegisterClientPage() {
               )}
 
               <div>
-                <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: '0.4rem' }}>
+                <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-2)', display: 'block', marginBottom: '0.4rem' }}>
                   Pourquoi maintenant ?
                 </label>
                 <textarea className="input-dark" rows={3} value={form.whyNow}
                   onChange={e => set('whyNow', e.target.value)}
                   placeholder="Mon entreprise stagne depuis 6 mois et j'ai un salon pro en mars..."
                   style={{ resize: 'none', marginTop: '0.4rem' }} />
-                <div style={{ textAlign: 'right', fontSize: '0.7rem', color: form.whyNow.length >= 50 ? 'var(--gold)' : 'var(--text-muted)' }}>
+                <div style={{ textAlign: 'right', fontSize: '0.7rem', color: form.whyNow.length >= 50 ? 'var(--gold)' : 'var(--text-2)' }}>
                   {form.whyNow.length}/50 min
                 </div>
               </div>
@@ -238,7 +238,7 @@ export default function RegisterClientPage() {
               <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
                 <button type="button" onClick={() => { setError(''); setStep(1); }} style={{
                   flex: 1, padding: '0.85rem', background: 'transparent',
-                  border: '1px solid var(--dark-border)', color: 'var(--text-muted)',
+                  border: '1px solid var(--border-2)', color: 'var(--text-2)',
                   cursor: 'pointer', fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase',
                 }}>Précédent</button>
                 <button type="button" className="btn-gold" style={{ flex: 2 }} disabled={loading} onClick={handleSubmit}>
@@ -249,7 +249,7 @@ export default function RegisterClientPage() {
           )}
         </div>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.75rem', color: 'var(--text-2)' }}>
           Déjà un compte ?{' '}
           <a href="/login" style={{ color: 'var(--gold)', textDecoration: 'none' }}>Se connecter</a>
         </p>
@@ -263,7 +263,7 @@ function Field({ label, type = 'text', value, onChange, placeholder }: {
 }) {
   return (
     <div>
-      <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: '0.4rem' }}>
+      <label style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-2)', display: 'block', marginBottom: '0.4rem' }}>
         {label}
       </label>
       <input className="input-dark" type={type} value={value}

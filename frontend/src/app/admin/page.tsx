@@ -41,12 +41,12 @@ export default function AdminDashboard() {
   ] : [];
 
   return (
-    <div style={{ display: 'flex', background: '#0D0D0D', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', background: 'var(--bg)', minHeight: '100vh' }}>
       <Sidebar role="admin" />
       <main style={{ marginLeft: 220, flex: 1, padding: '2.5rem' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 300, color: '#FAFAF8', marginBottom: '2.5rem' }}>Dashboard Admin</h1>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 300, color: 'var(--text)', marginBottom: '2.5rem' }}>Dashboard Admin</h1>
 
-        {loading ? <p style={{ color: '#555' }}>Chargement...</p> : (
+        {loading ? <p style={{ color: 'var(--text-2)' }}>Chargement...</p> : (
           <>
             {data?.alerts > 0 && (
               <div style={{ background: 'rgba(229,115,115,0.08)', border: '1px solid rgba(229,115,115,0.3)', padding: '1rem 1.5rem', marginBottom: '1.5rem', color: '#E57373', fontSize: '0.85rem' }}>
@@ -56,24 +56,24 @@ export default function AdminDashboard() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
               {kpis.map((k) => (
                 <Link key={k.label} href={k.href} style={{ textDecoration: 'none' }}>
-                  <div style={{ background: '#141414', border: `1px solid ${k.alert ? 'rgba(229,115,115,0.3)' : '#1a1a1a'}`, padding: '1.25rem', transition: 'border-color 0.2s' }}>
-                    <div style={{ color: '#555', fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{k.label}</div>
-                    <div style={{ fontFamily: 'Cormorant Garamond', fontSize: '2.5rem', fontWeight: 300, color: k.alert ? '#E57373' : '#FAFAF8' }}>{k.value}</div>
-                    {k.sub && <div style={{ color: '#444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{k.sub}</div>}
+                  <div style={{ background: 'var(--surface)', border: `1px solid ${k.alert ? 'rgba(229,115,115,0.3)' : 'var(--border)'}`, padding: '1.25rem', transition: 'border-color 0.2s' }}>
+                    <div style={{ color: 'var(--text-2)', fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{k.label}</div>
+                    <div style={{ fontFamily: 'Cormorant Garamond', fontSize: '2.5rem', fontWeight: 300, color: k.alert ? '#E57373' : 'var(--text)' }}>{k.value}</div>
+                    {k.sub && <div style={{ color: 'var(--text-2)', fontSize: '0.75rem', marginTop: '0.25rem' }}>{k.sub}</div>}
                   </div>
                 </Link>
               ))}
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-              <div style={{ background: '#141414', border: '1px solid #1a1a1a', padding: '1.5rem' }}>
-                <h2 style={{ fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#555', marginBottom: '1.25rem' }}>Actions rapides</h2>
+              <div style={{ background: 'var(--surface)', border: '1px solid #1a1a1a', padding: '1.5rem' }}>
+                <h2 style={{ fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-2)', marginBottom: '1.25rem' }}>Actions rapides</h2>
                 {[
                   { href: '/admin/coaches?status=PENDING', label: `Coachs en attente (${data?.pendingCoaches})` },
                   { href: '/admin/clients?status=PENDING', label: `Clients en attente (${data?.pendingClients})` },
                   { href: '/admin/finance', label: 'Métriques financières' },
                 ].map(({ href, label }) => (
-                  <Link key={href} href={href} style={{ display: 'block', padding: '0.6rem 0', color: '#888', fontSize: '0.8rem', textDecoration: 'none', borderBottom: '1px solid #1a1a1a' }}>
+                  <Link key={href} href={href} style={{ display: 'block', padding: '0.6rem 0', color: 'var(--text-2)', fontSize: '0.8rem', textDecoration: 'none', borderBottom: '1px solid #1a1a1a' }}>
                     {label} →
                   </Link>
                 ))}

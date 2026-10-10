@@ -2,10 +2,10 @@ export const metadata = { title: 'Politique de Cookies — ElitCoach' };
 
 export default function CookiesPage() {
   return (
-    <main style={{ background: 'var(--dark)', minHeight: '100vh', padding: '4rem 1rem' }}>
+    <main style={{ background: 'var(--bg)', minHeight: '100vh', padding: '4rem 1rem' }}>
       <div style={{ maxWidth: 760, margin: '0 auto' }}>
         <h1 className="font-display" style={{ fontSize: '2.2rem', fontWeight: 300, marginBottom: '0.5rem' }}>Politique de Cookies</h1>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: '3rem' }}>Dernière mise à jour : {new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+        <p style={{ color: 'var(--text-2)', fontSize: '0.8rem', marginBottom: '3rem' }}>Dernière mise à jour : {new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
         {[
           { title: 'Cookies strictement nécessaires', content: 'Ces cookies sont indispensables au fonctionnement d\'ElitCoach. Ils ne peuvent pas être désactivés.\n\n• refreshToken : authentification, durée 7 jours\n• session_id : maintien de la session, durée de la session\n\nBase légale : intérêt légitime (fonctionnement du service).' },
           { title: 'Cookies analytiques', content: 'Nous n\'utilisons pas de cookies analytiques tiers (Google Analytics, etc.). Nos statistiques internes sont calculées à partir des données de nos serveurs, sans dépôt de cookies.' },
@@ -15,7 +15,7 @@ export default function CookiesPage() {
         ].map((s, i) => (
           <div key={i} style={{ marginBottom: '2.5rem' }}>
             <h3 style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--gold)', marginBottom: '0.75rem' }}>{s.title}</h3>
-            <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.8, whiteSpace: 'pre-line' }}>{s.content}</div>
+            <div style={{ color: 'var(--text-2)', fontSize: '0.875rem', lineHeight: 1.8, whiteSpace: 'pre-line' }}>{s.content}</div>
           </div>
         ))}
       </div>

@@ -43,10 +43,10 @@ export default function Sidebar({ role }: SidebarProps) {
   }
 
   return (
-    <aside style={{ width: 220, minHeight: '100vh', background: '#141414', borderRight: '1px solid #1a1a1a', padding: '2rem 0', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0 }}>
+    <aside style={{ width: 220, minHeight: '100vh', background: 'var(--surface)', borderRight: '1px solid #1a1a1a', padding: '2rem 0', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0 }}>
       <div style={{ padding: '0 1.5rem 2rem', borderBottom: '1px solid #1a1a1a', marginBottom: '1rem' }}>
-        <Link href="/" style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '1.4rem', fontWeight: 300, color: '#FAFAF8', textDecoration: 'none' }}>ElitCoach</Link>
-        <div style={{ color: '#555', fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '0.2rem' }}>{role}</div>
+        <Link href="/" style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '1.4rem', fontWeight: 300, color: 'var(--text)', textDecoration: 'none' }}>ElitCoach</Link>
+        <div style={{ color: 'var(--text-2)', fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '0.2rem' }}>{role}</div>
       </div>
       <nav style={{ flex: 1, padding: '0 0.75rem' }}>
         {links.map(({ href, label, icon }) => {
@@ -57,7 +57,7 @@ export default function Sidebar({ role }: SidebarProps) {
               padding: '0.6rem 0.75rem', marginBottom: '0.15rem', borderRadius: 2,
               textDecoration: 'none',
               background: active ? 'rgba(201,168,76,0.08)' : 'transparent',
-              color: active ? '#C9A84C' : '#555',
+              color: active ? 'var(--gold)' : '#555',
               fontSize: '0.8rem',
               transition: 'all 0.15s',
             }}>
@@ -69,7 +69,7 @@ export default function Sidebar({ role }: SidebarProps) {
       </nav>
       <button type="button" onClick={handleLogout} style={{
         margin: '1rem', padding: '0.6rem', background: 'none',
-        border: '1px solid #1a1a1a', color: '#444', cursor: 'pointer',
+        border: '1px solid #1a1a1a', color: 'var(--text-2)', cursor: 'pointer',
         fontSize: '0.75rem', letterSpacing: '0.05em', textAlign: 'left',
       }}>→ Déconnexion</button>
     </aside>

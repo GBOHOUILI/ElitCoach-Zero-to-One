@@ -45,47 +45,47 @@ function AdminClientsContent() {
 
   function scoreColor(score: number) {
     if (score >= 75) return '#4CAF50';
-    if (score >= 60) return '#C9A84C';
+    if (score >= 60) return 'var(--gold)';
     return '#E57373';
   }
 
   return (
-    <div style={{ display: 'flex', background: '#0D0D0D', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', background: 'var(--bg)', minHeight: '100vh' }}>
       <Sidebar role="admin" />
       <main style={{ marginLeft: 220, flex: 1, padding: '2.5rem' }}>
-        <h1 style={{ fontSize: '1.25rem', fontWeight: 300, color: '#FAFAF8', marginBottom: '2rem' }}>Candidatures Clients <span style={{ color: '#C9A84C', fontSize: '1rem' }}>({total})</span></h1>
+        <h1 style={{ fontSize: '1.25rem', fontWeight: 300, color: 'var(--text)', marginBottom: '2rem' }}>Candidatures Clients <span style={{ color: 'var(--gold)', fontSize: '1rem' }}>({total})</span></h1>
 
         <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '1.5rem' }}>
           {[['', 'Tous'], ['PENDING', 'En attente'], ['APPROVED', 'Approuvés'], ['REJECTED', 'Refusés']].map(([v, l]) => (
             <button key={v} type="button" onClick={() => setActiveTab(v)} style={{
-              padding: '0.5rem 1rem', background: 'none', border: `1px solid ${activeTab === v ? '#C9A84C' : '#242424'}`,
-              color: activeTab === v ? '#C9A84C' : '#555', cursor: 'pointer', fontSize: '0.75rem',
+              padding: '0.5rem 1rem', background: 'none', border: `1px solid ${activeTab === v ? 'var(--gold)' : 'var(--border-2)'}`,
+              color: activeTab === v ? 'var(--gold)' : '#555', cursor: 'pointer', fontSize: '0.75rem',
             }}>{l}</button>
           ))}
         </div>
 
-        {loading ? <p style={{ color: '#555' }}>Chargement...</p> : (
+        {loading ? <p style={{ color: 'var(--text-2)' }}>Chargement...</p> : (
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid #1a1a1a' }}>
                 {['Nom', 'Email', 'Objectif', 'Budget', 'Score', 'Statut', 'Date', 'Actions'].map(h => (
-                  <th key={h} style={{ textAlign: 'left', padding: '0.75rem', color: '#444', fontWeight: 400, fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{h}</th>
+                  <th key={h} style={{ textAlign: 'left', padding: '0.75rem', color: 'var(--text-2)', fontWeight: 400, fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {clients.map(c => (
                 <tr key={c.id} style={{ borderBottom: '1px solid #111' }}>
-                  <td style={{ padding: '0.75rem', color: '#FAFAF8' }}>{c.firstName} {c.lastName}</td>
-                  <td style={{ padding: '0.75rem', color: '#555' }}>{c.user?.email}</td>
-                  <td style={{ padding: '0.75rem', color: '#555', maxWidth: 200 }}>
+                  <td style={{ padding: '0.75rem', color: 'var(--text)' }}>{c.firstName} {c.lastName}</td>
+                  <td style={{ padding: '0.75rem', color: 'var(--text-2)' }}>{c.user?.email}</td>
+                  <td style={{ padding: '0.75rem', color: 'var(--text-2)', maxWidth: 200 }}>
                     <span title={c.objective}>{c.objective?.substring(0, 50)}{c.objective?.length > 50 ? '...' : ''}</span>
                   </td>
-                  <td style={{ padding: '0.75rem', color: '#888' }}>{c.budget}€</td>
+                  <td style={{ padding: '0.75rem', color: 'var(--text-2)' }}>{c.budget}€</td>
                   <td style={{ padding: '0.75rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <span style={{ color: scoreColor(c.qualifyScore || 0), fontWeight: 500 }}>{c.qualifyScore || 0}</span>
-                      <div style={{ width: 40, height: 3, background: '#1a1a1a', borderRadius: 1 }}>
+                      <div style={{ width: 40, height: 3, background: 'var(--border)', borderRadius: 1 }}>
                         <div style={{ width: `${c.qualifyScore || 0}%`, height: '100%', background: scoreColor(c.qualifyScore || 0), borderRadius: 1 }} />
                       </div>
                     </div>
@@ -93,9 +93,9 @@ function AdminClientsContent() {
                   <td style={{ padding: '0.75rem' }}>
                     <span style={{ padding: '0.25rem 0.6rem', border: `1px solid ${STATUS_COLORS[c.status]}`, color: STATUS_COLORS[c.status], fontSize: '0.65rem' }}>{c.status}</span>
                   </td>
-                  <td style={{ padding: '0.75rem', color: '#444' }}>{new Date(c.createdAt).toLocaleDateString('fr-FR')}</td>
+                  <td style={{ padding: '0.75rem', color: 'var(--text-2)' }}>{new Date(c.createdAt).toLocaleDateString('fr-FR')}</td>
                   <td style={{ padding: '0.75rem' }}>
-                    <button type="button" onClick={() => { setSelected(c); setNewStatus(c.status); }} style={{ padding: '0.35rem 0.75rem', background: 'none', border: '1px solid #333', color: '#888', cursor: 'pointer', fontSize: '0.7rem' }}>Voir</button>
+                    <button type="button" onClick={() => { setSelected(c); setNewStatus(c.status); }} style={{ padding: '0.35rem 0.75rem', background: 'none', border: '1px solid #333', color: 'var(--text-2)', cursor: 'pointer', fontSize: '0.7rem' }}>Voir</button>
                   </td>
                 </tr>
               ))}
@@ -105,29 +105,29 @@ function AdminClientsContent() {
 
         {selected && (
           <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 999 }} onClick={() => setSelected(null)}>
-            <div style={{ background: '#141414', border: '1px solid #242424', padding: '2rem', width: '90%', maxWidth: 560, maxHeight: '80vh', overflow: 'auto' }} onClick={e => e.stopPropagation()}>
-              <h2 style={{ fontFamily: 'Cormorant Garamond', fontSize: '1.5rem', fontWeight: 300, color: '#FAFAF8', marginBottom: '1.5rem' }}>{selected.firstName} {selected.lastName}</h2>
+            <div style={{ background: 'var(--surface)', border: '1px solid #242424', padding: '2rem', width: '90%', maxWidth: 560, maxHeight: '80vh', overflow: 'auto' }} onClick={e => e.stopPropagation()}>
+              <h2 style={{ fontFamily: 'Cormorant Garamond', fontSize: '1.5rem', fontWeight: 300, color: 'var(--text)', marginBottom: '1.5rem' }}>{selected.firstName} {selected.lastName}</h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem', fontSize: '0.8rem', color: '#666' }}>
-                <div><span style={{ color: '#C9A84C' }}>Score :</span> {selected.qualifyScore}/100</div>
-                <div><span style={{ color: '#C9A84C' }}>Objectif :</span> {selected.objective}</div>
-                <div><span style={{ color: '#C9A84C' }}>Budget :</span> {selected.budget}€/mois</div>
-                <div><span style={{ color: '#C9A84C' }}>Heures/semaine :</span> {selected.hoursPerWeek}h</div>
-                <div><span style={{ color: '#C9A84C' }}>A déjà eu un coach :</span> {selected.hadCoachBefore ? 'Oui' : 'Non'}</div>
-                {selected.previousCoachResult && <div><span style={{ color: '#C9A84C' }}>Résultat précédent :</span> {selected.previousCoachResult}</div>}
-                <div><span style={{ color: '#C9A84C' }}>Pourquoi maintenant :</span> {selected.whyNow}</div>
+                <div><span style={{ color: 'var(--gold)' }}>Score :</span> {selected.qualifyScore}/100</div>
+                <div><span style={{ color: 'var(--gold)' }}>Objectif :</span> {selected.objective}</div>
+                <div><span style={{ color: 'var(--gold)' }}>Budget :</span> {selected.budget}€/mois</div>
+                <div><span style={{ color: 'var(--gold)' }}>Heures/semaine :</span> {selected.hoursPerWeek}h</div>
+                <div><span style={{ color: 'var(--gold)' }}>A déjà eu un coach :</span> {selected.hadCoachBefore ? 'Oui' : 'Non'}</div>
+                {selected.previousCoachResult && <div><span style={{ color: 'var(--gold)' }}>Résultat précédent :</span> {selected.previousCoachResult}</div>}
+                <div><span style={{ color: 'var(--gold)' }}>Pourquoi maintenant :</span> {selected.whyNow}</div>
               </div>
               <div style={{ marginBottom: '1rem' }}>
-                <label style={{ fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#555', display: 'block', marginBottom: '0.5rem' }}>Décision</label>
-                <select value={newStatus} onChange={e => setNewStatus(e.target.value)} style={{ background: '#0D0D0D', border: '1px solid #333', color: '#FAFAF8', padding: '0.6rem', width: '100%' }}>
+                <label style={{ fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-2)', display: 'block', marginBottom: '0.5rem' }}>Décision</label>
+                <select value={newStatus} onChange={e => setNewStatus(e.target.value)} style={{ background: 'var(--bg)', border: '1px solid #333', color: 'var(--text)', padding: '0.6rem', width: '100%' }}>
                   {['PENDING', 'APPROVED', 'REJECTED'].map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
               <div style={{ marginBottom: '1.5rem' }}>
-                <textarea value={note} onChange={e => setNote(e.target.value)} rows={2} style={{ background: '#0D0D0D', border: '1px solid #333', color: '#FAFAF8', padding: '0.6rem', width: '100%', fontSize: '0.8rem', resize: 'none' }} placeholder="Note (optionnel)" />
+                <textarea value={note} onChange={e => setNote(e.target.value)} rows={2} style={{ background: 'var(--bg)', border: '1px solid #333', color: 'var(--text)', padding: '0.6rem', width: '100%', fontSize: '0.8rem', resize: 'none' }} placeholder="Note (optionnel)" />
               </div>
               <div style={{ display: 'flex', gap: '0.75rem' }}>
-                <button type="button" onClick={() => setSelected(null)} style={{ flex: 1, padding: '0.75rem', background: 'none', border: '1px solid #333', color: '#555', cursor: 'pointer', fontSize: '0.75rem' }}>Annuler</button>
-                <button type="button" onClick={changeStatus} disabled={updating} style={{ flex: 2, padding: '0.75rem', background: '#C9A84C', color: '#0D0D0D', border: 'none', cursor: 'pointer', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Confirmer</button>
+                <button type="button" onClick={() => setSelected(null)} style={{ flex: 1, padding: '0.75rem', background: 'none', border: '1px solid #333', color: 'var(--text-2)', cursor: 'pointer', fontSize: '0.75rem' }}>Annuler</button>
+                <button type="button" onClick={changeStatus} disabled={updating} style={{ flex: 2, padding: '0.75rem', background: 'var(--gold)', color: 'var(--bg)', border: 'none', cursor: 'pointer', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Confirmer</button>
               </div>
             </div>
           </div>
